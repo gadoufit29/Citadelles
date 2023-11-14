@@ -1,4 +1,4 @@
-package test;
+package org.project.test;
 
 public class Test {
     public static void test(boolean passed, String message) {
