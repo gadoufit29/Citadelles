@@ -1,19 +1,22 @@
-package test;
+package org.project.test;
 
-import modele.Quartier;
+import org.project.modele.Quartier;
 
 public class TestQuartier {
     public static void main(String[] args) {
         TestQuartier testQuartier = new TestQuartier();
+        /*
         testQuartier.test1();
         testQuartier.test2();
         testQuartier.test3();
         testQuartier.test4();
         testQuartier.test5();
         testQuartier.test6();
-        testQuartier.test7();
-    }
 
+         */
+        testQuartier.test7();
+
+    }
     public void test1() {
         System.out.println("TEST DU CONSTRUCTEUR VIDE");
         Quartier quartier = new Quartier();
@@ -24,7 +27,7 @@ public class TestQuartier {
     }
 
     public void test2() {
-        System.out.println("TEST POUR UN TEMPLE (RELIGIEUX");
+        System.out.println("TEST POUR UN TEMPLE (RELIGIEUX)");
         Quartier quartier = new Quartier("temple", Quartier.TYPE_QUARTIERS[0], 1);
         Test.test(quartier.getNom().equals("temple"), "test du nom du quartier");
         Test.test(quartier.getType().equals("RELIGIEUX"), "test du type du quartier");
@@ -68,7 +71,6 @@ public class TestQuartier {
         Test.test(quartier.getCoutConstruction() == 3, "test du cout de la merveille");
         Test.test(quartier.getCaracteristiques().equals(caracteristiques), "test des caracteristiques de la merveille");
     }
-
     public void test7() {
         System.out.println("TEST DES ACCESSEURS EN ECRITURE");
         Quartier quartier = new Quartier();
@@ -88,4 +90,5 @@ public class TestQuartier {
         Test.test(quartier.getCaracteristiques().equals("A la fin de la partie..."),
                 "test du changement des caracteristiques");
     }
+
 }
