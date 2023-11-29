@@ -7,7 +7,7 @@ public class Quartier {
 
     public Quartier(){
         setNom("");
-        this.type = "";
+        setType("");
         setCoutConstruction(0);
         setCaracteristiques("");
     }
@@ -45,7 +45,7 @@ public class Quartier {
                 return;
             }
         }
-        System.out.println("Type de quartier invalide");
+        this.type = "";
     }
 
     public String getCaracteristiques() {
@@ -61,6 +61,9 @@ public class Quartier {
     }
 
     public void setCoutConstruction(int coutConstruction) {
-        this.coutConstruction = coutConstruction;
+        if(coutConstruction >= 1 && coutConstruction <= 6)
+            this.coutConstruction = coutConstruction;
+        else
+            this.coutConstruction = 0;
     }
 }

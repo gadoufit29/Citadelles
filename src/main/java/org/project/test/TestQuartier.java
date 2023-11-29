@@ -5,15 +5,12 @@ import org.project.modele.Quartier;
 public class TestQuartier {
     public static void main(String[] args) {
         TestQuartier testQuartier = new TestQuartier();
-        /*
         testQuartier.test1();
         testQuartier.test2();
         testQuartier.test3();
         testQuartier.test4();
         testQuartier.test5();
         testQuartier.test6();
-
-         */
         testQuartier.test7();
 
     }
