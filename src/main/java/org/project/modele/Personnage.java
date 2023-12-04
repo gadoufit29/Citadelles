@@ -8,6 +8,9 @@ public class Personnage {
     private Joueur joueur;
     private boolean estAssassine, estVole;
 
+
+    private Plateau plateau;
+
     /*
         Constructeur
         On utilise les setters dès que l'on peut, ici on utilise uniquement le setter de joueur car c'est
@@ -65,6 +68,10 @@ public class Personnage {
     public void setEstAssassine() {
         this.estAssassine = true;
     }
+
+    public Plateau getPlateau() {return plateau;}
+
+    public void setPlateau(Plateau plateau) {this.plateau = plateau;}
 
     // Méthode pour ajouter des pièces au trésor du joueur
     public void ajouterPieces() {
