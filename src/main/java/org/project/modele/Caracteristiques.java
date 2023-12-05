@@ -1,4 +1,4 @@
-package modele;
+package org.project.modele;
 
 public class Caracteristiques {
     public static String ASSASSIN=
