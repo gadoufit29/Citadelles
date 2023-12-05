@@ -6,9 +6,9 @@ import java.util.Random;
 public class Joueur {
     private String nom;
     private int tresor;
-    private ArrayList<Quartier> cite;
-    private ArrayList<Quartier> mainJoueur;
+    private ArrayList<Quartier> cite, mainJoueur;
     private boolean possedeCouronne;
+    protected Personnage monPersonnage;
 
     public Joueur(String nomJoueur){
         this.nom = nomJoueur;
@@ -16,6 +16,7 @@ public class Joueur {
         this.possedeCouronne = false;
         this.mainJoueur = new ArrayList<Quartier>();
         this.cite = new ArrayList<Quartier>();
+        monPersonnage = null;
     }
 
     public String getNom() {
@@ -24,6 +25,10 @@ public class Joueur {
 
     public int getTresor() {
         return tresor;
+    }
+
+    public Personnage getPersonnage(){
+        return monPersonnage;
     }
 
     public void ajouterPieces(int pieces){

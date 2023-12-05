@@ -7,9 +7,7 @@ public class Personnage {
     private int rang, nbPermisDeConstruire;
     private Joueur joueur;
     private boolean estAssassine, estVole;
-
-
-    private Plateau plateau;
+    private PlateauDeJeu plateau;
 
     /*
         Constructeur
@@ -47,7 +45,7 @@ public class Personnage {
         return caracteristiques;
     }
 
-    public int getNbPermis() {
+    public int getNbPermisDeConstruire() {
         return nbPermisDeConstruire;
     }
 
@@ -65,7 +63,7 @@ public class Personnage {
     }
 
     public void setJoueur(Joueur j) {
-        this.joueur = j;
+        this.joueur.monPersonnage = this;
     }
 
     public void setEstVole() {
@@ -76,9 +74,13 @@ public class Personnage {
         this.estAssassine = true;
     }
 
-    public Plateau getPlateau() {return plateau;}
+    public PlateauDeJeu getPlateau() {
+        return plateau;
+    }
 
-    public void setPlateau(Plateau plateau) {this.plateau = plateau;}
+    public void setPlateau(PlateauDeJeu plateau) {
+        this.plateau = plateau;
+    }
 
     // Méthode pour ajouter des pièces au trésor du joueur
     public void ajouterPieces() {
@@ -175,6 +177,7 @@ public class Personnage {
         setJoueur(null);
         this.estAssassine = false;
         this.estVole = false;
+        this.joueur.monPersonnage = null;
     }
 }
 
