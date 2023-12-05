@@ -5,6 +5,11 @@ public class Roi extends Personnage {
         super(nom, rang, caracteristiques, nbPermisDeConstruire);
     }
 
+    public Roi(){
+        super();
+
+    }
+
     /*public void percevoirRessourcesSpecifiques() {
         if (plateau != null) {
             for (Personnage personnage : plateau.getListePersonnages()) {

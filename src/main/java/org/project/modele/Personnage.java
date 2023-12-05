@@ -26,6 +26,13 @@ public class Personnage {
         this.estVole = false;
     }
 
+    public Personnage() {
+        this.nom = nom;
+        this.rang = rang;
+        this.caracteristiques = caracteristiques;
+        this.nbPermisDeConstruire = nbPermisDeConstruire;
+    }
+
     //Getters et setters
 
     public String getNom() {
