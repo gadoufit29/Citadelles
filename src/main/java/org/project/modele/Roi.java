@@ -24,4 +24,7 @@ public class Roi extends Personnage {
             System.out.println("Le joueur " + this.getJoueur().getNom() + " a gagné " + nbPieces);
         }
     }
+
+    @Override
+    public void utiliserPouvoirAvatar() {}
 }

@@ -19,4 +19,7 @@ public class Eveque extends Personnage{
         }
 
     }
+
+    @Override
+    public void utiliserPouvoirAvatar() {}
 }
