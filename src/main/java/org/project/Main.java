@@ -1,9 +1,11 @@
 package org.project;
 
-import org.project.test.TestQuartier;
+import org.project.application.Jeu;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        Jeu jeu = new Jeu();
+
+        jeu.jouer();
     }
 }
