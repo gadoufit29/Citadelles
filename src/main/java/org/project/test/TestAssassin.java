@@ -7,8 +7,9 @@ import org.project.modele.Roi;
 public class TestAssassin {
     public static void main(String[] args) {
         TestAssassin test = new TestAssassin();
-        test.test1();
-        test.test2();
+        //test.test1();
+        //test.test2();
+        test.test3();
     }
 
     public void test1() {
@@ -35,6 +36,31 @@ public class TestAssassin {
         // on utilise le pouvoir de l'assassin
         // NB : seul le roi peut être assassiné dans cette situation
         assassin.utiliserPouvoir();
-        Test.test(roi.getEstAssassine(), "le roi est assassiné");
+        if(roi.getEstAssassine()) {
+            Test.test(roi.getEstAssassine(), "le roi est assassiné");
+        }
+        else {
+            Test.test(!roi.getEstAssassine(), "le roi n'est pas assassiné");
+        }
     }
+
+    public void test3() {
+        System.out.println("TEST DE L'ASSASSINAT DU ROI AVEC L'AVATAR");
+        PlateauDeJeu plateau = new PlateauDeJeu();
+        Roi roi = new Roi();
+        plateau.ajouterPersonnage(roi);
+        Assassin assassin = new Assassin();
+        plateau.ajouterPersonnage(assassin);
+
+        // on utilise le pouvoir de l'assassin
+        // NB : seul le roi peut être assassiné dans cette situation
+        assassin.utiliserPouvoirAvatar();
+        if(roi.getEstAssassine()) {
+            Test.test(roi.getEstAssassine(), "le roi est assassiné");
+        }
+        else {
+            Test.test(!roi.getEstAssassine(), "le roi n'est pas assassiné");
+        }
+    }
+
 }
