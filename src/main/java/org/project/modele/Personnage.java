@@ -19,7 +19,7 @@ public class Personnage {
         this.rang = rang;
         this.caracteristiques = caracteristiques;
         this.nbPermisDeConstruire = nbPermisDeConstruire;
-        setJoueur(null);
+        this.joueur = null;
         this.estAssassine = false;
         this.estVole = false;
     }
@@ -49,11 +49,6 @@ public class Personnage {
         return nbPermisDeConstruire;
     }
 
-
-    public Joueur getJoueur() {
-        return joueur;
-    }
-
     public boolean getEstAssassine() {
         return estAssassine;
     }
@@ -62,7 +57,12 @@ public class Personnage {
         return estVole;
     }
 
+    public Joueur getJoueur() {
+        return joueur;
+    }
+
     public void setJoueur(Joueur j) {
+        this.joueur = j;
         this.joueur.monPersonnage = this;
     }
 
@@ -174,7 +174,7 @@ public class Personnage {
 
     // Méthode pour réinitialiser les attributs joueur, estAssassine et estVole
     public void reinitialiser() {
-        setJoueur(null);
+        this.joueur = null;
         this.estAssassine = false;
         this.estVole = false;
         this.joueur.monPersonnage = null;
