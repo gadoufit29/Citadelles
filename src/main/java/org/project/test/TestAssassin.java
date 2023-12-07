@@ -8,7 +8,7 @@ public class TestAssassin {
     public static void main(String[] args) {
         TestAssassin test = new TestAssassin();
         test.test1();
-        //test.test2();
+        test.test2();
     }
 
     public void test1() {
@@ -24,7 +24,6 @@ public class TestAssassin {
         Test.test(plateau.getPersonnage(1).getNbPermisDeConstruire() == 1, "test du nombre de permis de construire de l'assassin");
     }
 
-    /*
     public void test2() {
         System.out.println("TEST DE L'ASSASSINAT DU ROI");
         PlateauDeJeu plateau = new PlateauDeJeu();
@@ -38,6 +37,4 @@ public class TestAssassin {
         assassin.utiliserPouvoir();
         Test.test(roi.getEstAssassine(), "le roi est assassiné");
     }
-
-     */
 }
