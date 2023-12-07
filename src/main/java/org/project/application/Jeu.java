@@ -1,2 +1,4 @@
-package org.project.application;public class Jeu {
+package org.project.application;
+
+public class Jeu {
 }
