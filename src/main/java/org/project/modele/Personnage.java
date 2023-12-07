@@ -1,6 +1,6 @@
 package org.project.modele;
 
-public class Personnage {
+public abstract class Personnage {
 
     // Attributs
     private String nom, caracteristiques;
@@ -22,13 +22,6 @@ public class Personnage {
         this.joueur = null;
         this.estAssassine = false;
         this.estVole = false;
-    }
-
-    public Personnage() {
-        this.nom = nom;
-        this.rang = rang;
-        this.caracteristiques = caracteristiques;
-        this.nbPermisDeConstruire = nbPermisDeConstruire;
     }
 
     //Getters et setters
@@ -158,7 +151,7 @@ public class Personnage {
 
     // Méthode pour utiliser le pouvoir du personnage
     public void utiliserPouvoir() {
-        if (getJoueur() != null && getEstAssassine() == false) {
+        if (getJoueur() != null && !getEstAssassine()) {
             System.out.println("Aucun pouvoir");
         }
         else if(getJoueur() == null){
@@ -171,6 +164,8 @@ public class Personnage {
             System.out.println("Aucun pouvoir. Erreur inconnue");
         }
     }
+
+    public abstract void utiliserPouvoirAvatar();
 
     // Méthode pour réinitialiser les attributs joueur, estAssassine et estVole
     public void reinitialiser() {
