@@ -14,9 +14,9 @@ public class Joueur {
         this.nom = nomJoueur;
         this.tresor = 0;
         this.possedeCouronne = false;
-        this.mainJoueur = new ArrayList<Quartier>();
-        this.cite = new ArrayList<Quartier>();
-        monPersonnage = null;
+        this.mainJoueur = new ArrayList<>();
+        this.cite = new ArrayList<>();
+        this.monPersonnage = null;
     }
 
     public String getNom() {
@@ -26,7 +26,6 @@ public class Joueur {
     public int getTresor() {
         return tresor;
     }
-
     public Personnage getPersonnage(){
         return monPersonnage;
     }
@@ -95,12 +94,20 @@ public class Joueur {
         }
     }
 
+    public Quartier retirerQuartierDansMain(int numeroCarteDansMain){
+        return this.mainJoueur.remove(numeroCarteDansMain);
+    }
+
     public boolean getPossedeCouronne() {
         return possedeCouronne;
     }
 
     public void setPossedeCouronne(boolean b) {
         this.possedeCouronne = b;
+    }
+
+    public void replaceMain(ArrayList<Quartier> nouvelleMain){
+        this.mainJoueur = nouvelleMain;
     }
 
     public void reinitialiser() {
