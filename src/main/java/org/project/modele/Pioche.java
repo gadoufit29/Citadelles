@@ -14,7 +14,8 @@ public class Pioche {
             return null;
         }
 
-        Quartier carte = listeQuartiers.remove(0);
+        Quartier carte = listeQuartiers.get(0);
+        listeQuartiers.remove(0);
         return carte;
     }
 
@@ -27,7 +28,7 @@ public class Pioche {
     }
 
     public void melanger(){
-        ArrayList<Quartier> nouvelleListe = new ArrayList<Quartier>();
+        ArrayList<Quartier> nouvelleListe = new ArrayList<>();
         while(listeQuartiers.size() > 0){
             int index = (int)(Math.random() * listeQuartiers.size());
             nouvelleListe.add(listeQuartiers.remove(index));
