@@ -68,6 +68,9 @@ public class PlateauDeJeu {
         return listePersonnages;
     }
 
+    public ArrayList<Joueur> getListeJoueurs() {
+        return listeJoueurs;
+    }
 
 }
 
