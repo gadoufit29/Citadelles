@@ -21,6 +21,18 @@ public class PlateauDeJeu {
         this.nbJoueurs = 0;
     }
 
+    public PlateauDeJeu(Pioche pioche){
+        this.listePersonnages = new ArrayList<>();
+        this.listeJoueurs = new ArrayList<>();
+
+        // Initialiser la pioche en créant une instance
+        this.pioche = pioche;
+
+        // Initialiser les compteurs à zéro
+        this.nbPersonnages = 0;
+        this.nbJoueurs = 0;
+    }
+
     public int getNbJoueurs() {
         return nbJoueurs;
     }
