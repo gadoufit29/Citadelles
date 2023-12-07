@@ -5,6 +5,8 @@ import org.project.modele.*;
 public class Configuration {
     public static Pioche nouvellePioche() {
 
+        Pioche nouvellePioche = new Pioche();
+
         /* Religieux */
 
         Quartier quartier1 = new Quartier("Temple", Quartier.TYPE_QUARTIERS[0], 1);
@@ -84,62 +86,62 @@ public class Configuration {
         Quartier quartier53 = new Quartier("Hôtel de ville", Quartier.TYPE_QUARTIERS[3], 5);
         Quartier quartier54 = new Quartier("Hôtel de ville", Quartier.TYPE_QUARTIERS[3], 5);
 
-        nouvellePioche().ajouter(quartier1);
-        nouvellePioche().ajouter(quartier2);
-        nouvellePioche().ajouter(quartier3);
-        nouvellePioche().ajouter(quartier4);
-        nouvellePioche().ajouter(quartier5);
-        nouvellePioche().ajouter(quartier6);
-        nouvellePioche().ajouter(quartier7);
-        nouvellePioche().ajouter(quartier8);
-        nouvellePioche().ajouter(quartier9);
-        nouvellePioche().ajouter(quartier10);
-        nouvellePioche().ajouter(quartier11);
-        nouvellePioche().ajouter(quartier12);
-        nouvellePioche().ajouter(quartier13);
-        nouvellePioche().ajouter(quartier14);
-        nouvellePioche().ajouter(quartier15);
-        nouvellePioche().ajouter(quartier16);
-        nouvellePioche().ajouter(quartier17);
-        nouvellePioche().ajouter(quartier18);
-        nouvellePioche().ajouter(quartier19);
-        nouvellePioche().ajouter(quartier20);
-        nouvellePioche().ajouter(quartier21);
-        nouvellePioche().ajouter(quartier22);
-        nouvellePioche().ajouter(quartier23);
-        nouvellePioche().ajouter(quartier24);
-        nouvellePioche().ajouter(quartier25);
-        nouvellePioche().ajouter(quartier26);
-        nouvellePioche().ajouter(quartier27);
-        nouvellePioche().ajouter(quartier28);
-        nouvellePioche().ajouter(quartier29);
-        nouvellePioche().ajouter(quartier30);
-        nouvellePioche().ajouter(quartier31);
-        nouvellePioche().ajouter(quartier32);
-        nouvellePioche().ajouter(quartier33);
-        nouvellePioche().ajouter(quartier34);
-        nouvellePioche().ajouter(quartier35);
-        nouvellePioche().ajouter(quartier36);
-        nouvellePioche().ajouter(quartier37);
-        nouvellePioche().ajouter(quartier38);
-        nouvellePioche().ajouter(quartier39);
-        nouvellePioche().ajouter(quartier40);
-        nouvellePioche().ajouter(quartier41);
-        nouvellePioche().ajouter(quartier42);
-        nouvellePioche().ajouter(quartier43);
-        nouvellePioche().ajouter(quartier44);
-        nouvellePioche().ajouter(quartier45);
-        nouvellePioche().ajouter(quartier46);
-        nouvellePioche().ajouter(quartier47);
-        nouvellePioche().ajouter(quartier48);
-        nouvellePioche().ajouter(quartier49);
-        nouvellePioche().ajouter(quartier50);
-        nouvellePioche().ajouter(quartier51);
-        nouvellePioche().ajouter(quartier52);
-        nouvellePioche().ajouter(quartier53);
-        nouvellePioche().ajouter(quartier54);
+        nouvellePioche.ajouter(quartier1);
+        nouvellePioche.ajouter(quartier2);
+        nouvellePioche.ajouter(quartier3);
+        nouvellePioche.ajouter(quartier4);
+        nouvellePioche.ajouter(quartier5);
+        nouvellePioche.ajouter(quartier6);
+        nouvellePioche.ajouter(quartier7);
+        nouvellePioche.ajouter(quartier8);
+        nouvellePioche.ajouter(quartier9);
+        nouvellePioche.ajouter(quartier10);
+        nouvellePioche.ajouter(quartier11);
+        nouvellePioche.ajouter(quartier12);
+        nouvellePioche.ajouter(quartier13);
+        nouvellePioche.ajouter(quartier14);
+        nouvellePioche.ajouter(quartier15);
+        nouvellePioche.ajouter(quartier16);
+        nouvellePioche.ajouter(quartier17);
+        nouvellePioche.ajouter(quartier18);
+        nouvellePioche.ajouter(quartier19);
+        nouvellePioche.ajouter(quartier20);
+        nouvellePioche.ajouter(quartier21);
+        nouvellePioche.ajouter(quartier22);
+        nouvellePioche.ajouter(quartier23);
+        nouvellePioche.ajouter(quartier24);
+        nouvellePioche.ajouter(quartier25);
+        nouvellePioche.ajouter(quartier26);
+        nouvellePioche.ajouter(quartier27);
+        nouvellePioche.ajouter(quartier28);
+        nouvellePioche.ajouter(quartier29);
+        nouvellePioche.ajouter(quartier30);
+        nouvellePioche.ajouter(quartier31);
+        nouvellePioche.ajouter(quartier32);
+        nouvellePioche.ajouter(quartier33);
+        nouvellePioche.ajouter(quartier34);
+        nouvellePioche.ajouter(quartier35);
+        nouvellePioche.ajouter(quartier36);
+        nouvellePioche.ajouter(quartier37);
+        nouvellePioche.ajouter(quartier38);
+        nouvellePioche.ajouter(quartier39);
+        nouvellePioche.ajouter(quartier40);
+        nouvellePioche.ajouter(quartier41);
+        nouvellePioche.ajouter(quartier42);
+        nouvellePioche.ajouter(quartier43);
+        nouvellePioche.ajouter(quartier44);
+        nouvellePioche.ajouter(quartier45);
+        nouvellePioche.ajouter(quartier46);
+        nouvellePioche.ajouter(quartier47);
+        nouvellePioche.ajouter(quartier48);
+        nouvellePioche.ajouter(quartier49);
+        nouvellePioche.ajouter(quartier50);
+        nouvellePioche.ajouter(quartier51);
+        nouvellePioche.ajouter(quartier52);
+        nouvellePioche.ajouter(quartier53);
+        nouvellePioche.ajouter(quartier54);
 
-        return nouvellePioche();
+        return nouvellePioche;
     }
 
     public static PlateauDeJeu configurationDeBase() {
@@ -175,6 +177,8 @@ public class Configuration {
         pioche.ajouter(merveille12);
         pioche.ajouter(merveille13);
         pioche.ajouter(merveille14);
+
+        pioche.melanger();
 
         Personnage assassin = new Assassin();
         Personnage voleur = new Voleur();
