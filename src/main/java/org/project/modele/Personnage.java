@@ -240,7 +240,15 @@ public abstract class Personnage {
                     System.out.println("\t 4. Commerçant");
                     System.out.println("\t 5. Merveille");
 
-                    int choix = Interaction.lireUnEntier(1, 6);
+                    int choix = 0;
+
+                    if(joueur == this.plateau.getJoueur(0))
+                        choix = Interaction.lireUnEntier(1, 6);
+
+                    else
+                        choix = generateur.nextInt(5) + 1;
+
+
                     switch (choix){
                         case 1:
                             System.out.println("\"L'École de magie\" a pour ce tour le type suivant : Religieux.");
