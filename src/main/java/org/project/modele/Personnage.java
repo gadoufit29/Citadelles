@@ -96,7 +96,6 @@ public abstract class Personnage {
     public void ajouterQuartierDansMain(Quartier nouveau) {
         if (getJoueur() != null && !getEstAssassine()) {
             getJoueur().ajouterQuartierDansMain(nouveau);
-            System.out.println("Ajout du quartier " + nouveau.getNom() + " à la main du joueur " + getJoueur().getNom());
         }
         else if(getJoueur() == null){
             System.out.println("Aucun quartier ajouté. Le personnage n'est pas associé à un joueur");

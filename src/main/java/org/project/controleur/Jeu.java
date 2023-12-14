@@ -74,10 +74,13 @@ public class Jeu{
     private void initialisation(){
         this.plateauDeJeu = Configuration.configurationDeBase();
 
-        Joueur joueur1 = new Joueur("Joueur 1");
-        Joueur joueur2 = new Joueur("Joueur 2");
-        Joueur joueur3 = new Joueur("Joueur 3");
-        Joueur joueur4 = new Joueur("Joueur 4");
+        System.out.println("Quel est ton nom ? : ");
+        String nomJoueur = Interaction.lireUneChaine();
+
+        Joueur joueur1 = new Joueur(nomJoueur);
+        Joueur joueur2 = new Joueur("NoobMaster69");
+        Joueur joueur3 = new Joueur("PixelPirate42");
+        Joueur joueur4 = new Joueur("MaxiBabyBoss");
 
         joueur1.ajouterPieces(2);
         joueur2.ajouterPieces(2);
@@ -276,15 +279,25 @@ public class Jeu{
                     System.out.println("********* POUVOIR *********");
                     System.out.println();
                     joueurDuTour.getPersonnage().utiliserPouvoir();
+                    System.out.println("********* CONSTRUCTION *********");
+                    System.out.println();
                     construire(joueurDuTour.getPersonnage());
                 }
 
                 else {
+                    System.out.println("********* PERCEPTION DES RESSOURCES *********");
+                    System.out.println();
                     percevoirRessourcesAvatar(joueurDuTour.getPersonnage());
+                    System.out.println();
+                    System.out.println("********* PERCEPTION DES RESSOURCES SPÉCIFIQUES *********");
+                    System.out.println();
+                    joueurDuTour.getPersonnage().percevoirRessourcesSpecifiques();
                     System.out.println("********* POUVOIR *********");
                     System.out.println();
                     joueurDuTour.getPersonnage().utiliserPouvoirAvatar();
-                    joueurDuTour.getPersonnage().percevoirRessourcesSpecifiques();
+                    System.out.println();
+                    System.out.println("********* CONSTRUCTION *********");
+                    System.out.println();
                     construireAvatar(joueurDuTour.getPersonnage());
                 }
 
@@ -326,10 +339,12 @@ public class Jeu{
                 if (choixCarte == 1) {
                     p.ajouterQuartierDansMain(carte1);
                     System.out.println("Vous avez choisi de garder le quartier \"" + carte1.getNom() + "\"");
+                    this.plateauDeJeu.getPioche().ajouter(carte2);
                     System.out.println();
                 } else {
                     p.ajouterQuartierDansMain(carte2);
                     System.out.println("Vous avez choisi de garder le quartier \"" + carte2.getNom() + "\"");
+                    this.plateauDeJeu.getPioche().ajouter(carte1);
                     System.out.println();
                 }
             }
@@ -351,6 +366,8 @@ public class Jeu{
 
         if (choix == 1) {
             p.ajouterPieces();
+            System.out.println("Vous avez choisi de prendre 2 pièces");
+            System.out.println();
         }
         else {
             Quartier carte1 = this.plateauDeJeu.getPioche().piocher();
@@ -363,8 +380,10 @@ public class Jeu{
                 int choixCarte = generateur.nextInt(2) + 1;
                 if (choixCarte == 1) {
                     p.ajouterQuartierDansMain(carte1);
+                    this.plateauDeJeu.getPioche().ajouter(carte2);
                 } else {
                     p.ajouterQuartierDansMain(carte2);
+                    this.plateauDeJeu.getPioche().ajouter(carte1);
                 }
 
                 System.out.println("Vous avez choisi de garder la carte n°" + choixCarte);
@@ -379,9 +398,6 @@ public class Jeu{
     }
 
     private void construire(Personnage p) {
-        System.out.println();
-        System.out.println("********* CONSTRUCTION *********");
-        System.out.println();
         if(!p.getJoueur().getMainJoueur().isEmpty()){
             System.out.println("Vous pouvez construire jusqu'à " + p.getJoueur().getPersonnage().getNbPermisDeConstruire() + " quartier(s)");
             System.out.println("Souhaitez-vous construire un quartier ? (o/ oui ; n / non)");
@@ -528,7 +544,6 @@ public class Jeu{
                 }
 
                 else if (carriere) {
-                    // Logique de construction pour les autres quartiers
                     if (p.getJoueur().getTresor() >= coutConstruction) {
                         p.getJoueur().retirerPieces(coutConstruction);
                         p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
@@ -544,7 +559,6 @@ public class Jeu{
                     nombreConstruction++;
 
                 } else {
-                    // Logique de construction pour les autres quartiers
                     if (p.getJoueur().getTresor() >= coutConstruction) {
                         p.getJoueur().retirerPieces(coutConstruction);
                         p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
@@ -567,9 +581,6 @@ public class Jeu{
     }
 
     private void construireAvatar(Personnage p){
-        System.out.println();
-        System.out.println("********* CONSTRUCTION *********");
-        System.out.println();
         if(!p.getJoueur().getMainJoueur().isEmpty()){
             System.out.println("Vous pouvez construire jusqu'à " + p.getJoueur().getPersonnage().getNbPermisDeConstruire() + " quartier(s)");
             System.out.println("Souhaitez-vous construire un quartier ? (o/ oui ; n / non)");
