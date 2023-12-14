@@ -168,6 +168,7 @@ public class Condottiere extends Personnage{
                             if(super.getJoueur().getTresor() >= (listeJoueurs.get(choixJoueur - 1).getCite().get(choixQuartier - 1).getCoutConstruction() - 1)){
                                 super.getJoueur().retirerPieces((listeJoueurs.get(choixJoueur - 1).getCite().get(choixQuartier - 1).getCoutConstruction() - 1));
                                 System.out.println(Colors.ANSI_RED + "Le quartier " + listeJoueurs.get(choixJoueur - 1).getCite().get(choixQuartier - 1).getNom() + " a été détruit !" + Colors.ANSI_RESET);
+                                super.getPlateau().getPioche().ajouter(listeJoueurs.get(choixJoueur - 1).getCite().get(choixQuartier - 1));
                                 listeJoueurs.get(choixJoueur - 1).getCite().remove(choixQuartier - 1);
                                 return;
                             }
