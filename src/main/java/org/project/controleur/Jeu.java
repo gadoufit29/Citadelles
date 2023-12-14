@@ -76,34 +76,10 @@ public class Jeu{
         Joueur joueur3 = new Joueur("Joueur 3");
         Joueur joueur4 = new Joueur("Joueur 4");
 
-        joueur1.ajouterPieces(10);
+        joueur1.ajouterPieces(2);
         joueur2.ajouterPieces(2);
         joueur3.ajouterPieces(2);
         joueur4.ajouterPieces(2);
-
-        Quartier quartier0 = new Quartier("Temple", Quartier.TYPE_QUARTIERS[0], 1);
-        joueur1.ajouterQuartierDansCite(quartier0);
-
-        Quartier quartier4 = new Quartier("Temple", Quartier.TYPE_QUARTIERS[0], 1);
-        joueur1.ajouterQuartierDansCite(quartier4);
-
-        Quartier quartier5 = new Quartier("École de Magie", Quartier.TYPE_QUARTIERS[4], 1);
-        joueur1.ajouterQuartierDansCite(quartier5);
-
-        Quartier quartier2 = new Quartier("Tripot", Quartier.TYPE_QUARTIERS[4], 6);
-        joueur1.ajouterQuartierDansCite(quartier2);
-
-        Quartier quartier1 = new Quartier("Manufacture", Quartier.TYPE_QUARTIERS[4], 1);
-        joueur1.ajouterQuartierDansCite(quartier1);
-
-        Quartier quartier6 = new Quartier("Manufacture", Quartier.TYPE_QUARTIERS[4], 1);
-        joueur1.ajouterQuartierDansCite(quartier6);
-
-        Quartier quartier7 = new Quartier("Manufacture", Quartier.TYPE_QUARTIERS[4], 1);
-        joueur1.ajouterQuartierDansCite(quartier7);
-
-        //Quartier quartier4 = new Quartier("Forge", Quartier.TYPE_QUARTIERS[0], 1);
-        //joueur1.ajouterQuartierDansCite(quartier4);
 
 
         for(int i = 0; i < 4; i++){
@@ -535,104 +511,179 @@ public class Jeu{
     }
 
     private void construireAvatar(Personnage p){
-        System.out.println("Souhaitez-vous construire un quartier ? (o/ oui ; n / non)");
-        Boolean construire = generateur.nextBoolean();
-        if(construire){
-            Boolean carriere = false;
-            Boolean manufacture = false;
-            Boolean tripot = false;
-            for(Quartier quartierCite : p.getJoueur().getCite()){
-                if(quartierCite.getNom().equals("Carrière"))
-                    carriere = true;
+        if(!p.getJoueur().getMainJoueur().isEmpty()){
+            System.out.println("Souhaitez-vous construire un quartier ? (o/ oui ; n / non)");
+            if (!generateur.nextBoolean()) {
+                System.out.println("Vous ne construisez pas de quartier");
+                return;
+            }
 
-                if(quartierCite.getNom().equals("Manufacture"))
-                    manufacture = true;
+            // Vérification de la présence de certains quartiers
+            Boolean carriere = false, manufacture = false;
+            for (Quartier quartier : p.getJoueur().getCite()) {
+                if (quartier.getNom().equals("Carrière")) carriere = true;
+                if (quartier.getNom().equals("Manufacture")) manufacture = true;
+            }
 
-                if(quartierCite.getNom().equals("Tripot")){
-                    tripot = true;
+            // Boucle pour la construction des quartiers
+            System.out.println("Quel quartier voulez-vous construire ? (0 pour ne pas construire de quartier)");
+            int nombreConstruction = 0;
+            while (nombreConstruction != p.getJoueur().getPersonnage().getNbPermisDeConstruire()) {
+                System.out.println("Votre main :");
+                // Affichage des cartes de la main du joueur
+                int i = 1;
+                for (Quartier quartier : p.getJoueur().getMainJoueur()) {
+                    int coutConstruction = quartier.getCoutConstruction() - (manufacture && quartier.getType().equals(Quartier.TYPE_QUARTIERS[4]) ? 1 : 0);
+                    System.out.println("\t " + i + ". " + quartier.getNom() + " (coût de construction : " + coutConstruction + ")");
+                    i++;
                 }
-            }
-            System.out.println("oui");
-            System.out.println("Voici les cartes de votre main : ");
-            int i = 1;
-            for(Quartier quartier : p.getJoueur().getMainJoueur()){
-                System.out.println();
-                if(manufacture && quartier.getType().equals(Quartier.TYPE_QUARTIERS[4]))
-                    System.out.println("\t " + i + ". " + quartier.getNom() + " (coût de construction : " + Colors.ANSI_GREEN + (quartier.getCoutConstruction() - 1) + Colors.ANSI_RESET + ")");
-                else
-                    System.out.println("\t " + i + ". " + quartier.getNom() + " (coût de construction : " + quartier.getCoutConstruction() + ")");
-                i++;
-            }
-            System.out.println("Voici votre trésorerie : " + p.getJoueur().getTresor());
-            System.out.println();
 
-            if(carriere)
-                System.out.println("Vous avez une carrière dans votre cité. Vous pouvez construire 2 quartiers identitques");
-            if(manufacture)
-                System.out.println("Vous avez une manufacture dans votre cité. Vous payez une pièce d'or en moins pour construire une merveille");
-            if(tripot)
-                System.out.println("Vous avez un tripot dans votre cité. Vous pouvez payer tout ou partie du coût de construction du Tripot en cartes de votre main, au prix de 1 carte pour 1 pièce d’or");
+                i = 1;
 
-            do{
-                System.out.println("Quel quartier voulez-vous construire ? (0 pour ne pas construire de quartier)");
+                System.out.println("Votre cité : ");
+                // Affichage des cartes de la cité du joueur
+                for (Quartier quartier : p.getJoueur().getCite()) {
+                    System.out.println("\t " + i + ". " + quartier.getNom());
+                    i++;
+                }
+                System.out.println(Colors.ANSI_YELLOW + "Vous avez : " + p.getJoueur().getTresor() + " pièce(s) d'or" + Colors.ANSI_RESET);
+
+                System.out.print("Quel quartier voulez-vous construire ? (0 pour ne pas construire de quartier) : ");
                 int choix = generateur.nextInt(p.getJoueur().nbQuartiersDansMain() + 1);
+                if (choix == 0) return;
 
-                if(choix == 0)
-                    return;
+                Quartier quartierChoisi = p.getJoueur().getMainJoueur().get(choix - 1);
+                int coutConstruction = quartierChoisi.getCoutConstruction() - (manufacture && quartierChoisi.getType().equals(Quartier.TYPE_QUARTIERS[4]) ? 1 : 0);
 
-                if(p.getJoueur().getCite().isEmpty()){
-                    if(p.getJoueur().getTresor() >= p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction()){
-                        p.getJoueur().retirerPieces(p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction());
-                        p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                        p.getJoueur().getMainJoueur().remove(choix - 1);
-                        return;
-                    }
+                // Traitement de la construction d'un quartier
+                if (quartierChoisi.getNom().equals("Tripot")) {
+                    int nbPieces = 0;
+                    if(p.getJoueur().getTresor() > 0){
+                        System.out.println("Souhaitez-vous utiliser des pièces pour la construction ? (o / oui ; n / non)");
+                        if (generateur.nextBoolean()) {
+                            System.out.println("Combien de pièces voulez-vous utiliser ?");
+                            nbPieces = generateur.nextInt(1, p.getJoueur().getTresor() + 1);
 
-                    else
-                        System.out.println("Vous n'avez pas assez de pièces pour construire ce quartier");
-                }
-
-                else{
-                    for(Quartier quartier : p.getJoueur().getCite()){
-                        if(quartier.getNom().equals("Carrière")){
-                            System.out.println("Vous avez une carrière dans votre cité. Vous pouvez construire 2 quartiers identitques");
-
-                            if(p.getJoueur().getTresor() >= p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction()){
-                                p.getJoueur().retirerPieces(p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction());
-                                p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                                p.getJoueur().getMainJoueur().remove(choix - 1);
-                                return;
+                            if (nbPieces > p.getJoueur().getTresor()) {
+                                System.out.println("Vous ne pouvez pas payer plus de pièces que vous n'en avez");
+                                continue;
                             }
 
-                            else{
-                                System.out.println("Vous n'avez pas assez de pièces pour construire ce quartier");
-                                break;
+                            else if(nbPieces > coutConstruction) {
+                                System.out.println("Vous ne pouvez pas payer plus de pièces que le coût de construction du Tripot");
+                                continue;
+                            }
+
+                            else if (nbPieces == coutConstruction) {
+                                p.getJoueur().retirerPieces(nbPieces);
+                                p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                                p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                                nombreConstruction++;
+                                System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                                continue;
                             }
                         }
+
+                        else {
+                            System.out.println("Vous ne payez pas de pièces pour la construction du Tripot");
+                        }
                     }
 
-                    for(Quartier quartier : p.getJoueur().getCite()){
-                        if(quartier.getNom().equals(p.getJoueur().getMainJoueur().get(choix - 1).getNom())){
-                            System.out.println("Vous avez déjà ce quartier dans votre cité");
-                            break;
+                    if(nbPieces + (p.getJoueur().getMainJoueur().size() -  1) >= coutConstruction){
+                        ArrayList<Quartier> quartiersADefaite = new ArrayList<>();
+                        if (nbPieces == 0 && (p.getJoueur().getMainJoueur().size() - 1) == coutConstruction) {
+                            for (Quartier quartier : p.getJoueur().getMainJoueur()) {
+                                if (!quartier.getNom().equals("Tripot")) {
+                                    this.plateauDeJeu.getPioche().ajouter(quartier);
+                                    quartiersADefaite.add(quartier); // Ajoutez le quartier à la liste temporaire
+                                }
+                            }
+
+                            for (Quartier quartier : quartiersADefaite) {
+                                p.getJoueur().getMainJoueur().remove(quartier);
+                            }
+
+                            p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                            p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                            nombreConstruction++;
+                            System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                            continue;
                         }
 
-                        if(p.getJoueur().getTresor() >= p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction()){
-                            p.getJoueur().retirerPieces(p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction());
-                            p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                            p.getJoueur().getMainJoueur().remove(choix - 1);
-                            return;
+                        else{
+                            int l = 0;
+                            do {
+                                int k = 1;
+                                for (Quartier quartier : p.getJoueur().getMainJoueur()) {
+                                    System.out.println("\t " + k + ". " + quartier.getNom());
+                                    k++;
+                                }
+                                System.out.println("Quartier n°" + (l+1) + "  a defausser : ");
+
+                                int choixQuartierDefausser = generateur.nextInt(1, p.getJoueur().getMainJoueur().size() + 1);
+
+                                if(p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1).getNom().equals("Tripot")){
+                                    System.out.println("Vous ne pouvez pas défausser le Tripot");
+                                    continue;
+                                }
+
+                                this.plateauDeJeu.getPioche().ajouter(p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1));
+                                System.out.println("Vous avez défaussé le quartier : " + p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1).getNom());
+                                System.out.println("Il vous reste " + (coutConstruction - nbPieces - (l+1)) + " quartier(s) à défausser");
+                                p.getJoueur().getMainJoueur().remove(p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1));
+                                l++;
+
+                            }while(nbPieces + l != coutConstruction);
+
+                            p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                            p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                            System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
                         }
 
-                        else
-                            System.out.println("Vous n'avez pas assez de pièces pour construire ce quartier");
+                        nombreConstruction++;
+                    }
+
+                    else {
+                        System.out.println("Vous ne pouvez pas construire le Tripot (Pas assez de pièces et/ou de quartiers à défausser)");
                     }
                 }
-            }while (true);
+
+                else if (carriere) {
+                    // Logique de construction pour les autres quartiers
+                    if (p.getJoueur().getTresor() >= coutConstruction) {
+                        p.getJoueur().retirerPieces(coutConstruction);
+                        p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                        p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                    }
+
+                    else {
+                        System.out.println("Vous ne pouvez pas construire ce quartier (Pas assez de pièces)");
+                        continue;
+                    }
+
+                    System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                    nombreConstruction++;
+
+                } else {
+                    // Logique de construction pour les autres quartiers
+                    if (p.getJoueur().getTresor() >= coutConstruction) {
+                        p.getJoueur().retirerPieces(coutConstruction);
+                        p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                        p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                    }
+
+                    else {
+                        System.out.println("Vous ne pouvez pas construire ce quartier (Pas assez de pièces)");
+                        continue;
+                    }
+
+                    System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                    nombreConstruction++;
+                }
+            }
         }
         else{
-            System.out.println("non");
-            System.out.println("Vous ne construisez pas de quartier");
+            System.out.println("Vous n'avez pas de quartier dans votre main");
         }
     }
 
@@ -688,7 +739,14 @@ public class Jeu{
                     System.out.println("\t 4. Commerçant");
                     System.out.println("\t 5. Merveille");
 
-                    int choix = Interaction.lireUnEntier(1, 6);
+                    int choix = 0;
+
+                    if(joueur == this.plateauDeJeu.getJoueur(0))
+                        choix = Interaction.lireUnEntier(1, 6);
+
+                    else
+                        choix = generateur.nextInt(5) + 1;
+
 
                     switch (choix){
                         case 1:
