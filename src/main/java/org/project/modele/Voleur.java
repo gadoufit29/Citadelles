@@ -26,7 +26,7 @@ public class Voleur extends Personnage{
                 }
                 System.out.println("\nQuel est le numéro de personnage que vous voulez voler ? (0 pour ne pas voler de personnage)");
 
-                int choix = Interaction.lireUnEntier(1 , listePersonnages.size() + 1);
+                int choix = Interaction.lireUnEntier(0 , listePersonnages.size() + 1);
 
                 if(choix == 0){
                     return;
