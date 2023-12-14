@@ -13,11 +13,6 @@ public abstract class Personnage {
     private boolean estAssassine, estVole;
     private PlateauDeJeu plateau;
 
-    /*
-        Constructeur
-        On utilise les setters dès que l'on peut, ici on utilise uniquement le setter de joueur car c'est
-        la seule méthode qui permet de réecrire un attribut en fonction d'un paramètre dans les parentheses
-     */
     public Personnage(String nom, int rang, String caracteristiques, int nbPermisDeConstruire) {
         this.nom = nom;
         this.rang = rang;
@@ -79,31 +74,25 @@ public abstract class Personnage {
         this.plateau = plateau;
     }
 
-    // Méthode pour ajouter des pièces au trésor du joueur
     public void ajouterPieces() {
-        // Si le personnage est associé à un joueur et n'est pas assassiné, on ajoute deux pièces au trésor du joueur
         if (getJoueur() != null && !getEstAssassine()){
             getJoueur().ajouterPieces(2);
             System.out.println("Ajout de deux pièces au trésor de " + getJoueur().getNom());
         }
 
-        // Si le personnage n'est pas associé à un joueur, on affiche un message d'erreur
         else if(getJoueur() == null){
             System.out.println("Aucune pièce ajoutée. Le personnage n'est pas associé à un joueur");
         }
 
-        // Si le personnage est assassiné, on affiche un message d'erreur
         else if(getEstAssassine()){
             System.out.println("Aucune pièce ajoutée. Le personnage est assassiné");
         }
 
-        // Si le personnage n'est pas associé à un joueur et n'est pas assassiné, on affiche un message d'erreur
         else{
             System.out.println("Aucune pièce ajoutée. Erreur inconnue");
         }
     }
 
-    // Méthode pour piocher un quartier
     public void ajouterQuartierDansMain(Quartier nouveau) {
         if (getJoueur() != null && !getEstAssassine()) {
             getJoueur().ajouterQuartierDansMain(nouveau);
@@ -120,7 +109,6 @@ public abstract class Personnage {
         }
     }
 
-    // Méthode pour construire un quartier
     public void construire(Quartier nouveau) {
         if (getJoueur() != null && !getEstAssassine()) {
             getJoueur().ajouterQuartierDansCite(nouveau);
@@ -137,12 +125,8 @@ public abstract class Personnage {
         }
     }
 
-    // Méthode pour percevoir les ressources spécifiques du personnage
     public void percevoirRessourcesSpecifiques() {
         if (getJoueur() != null && !getEstAssassine()) {
-            System.out.println();
-            System.out.println("********* RESSOURCES SPECIFIQUES *********");
-            System.out.println();
             Random generateur = new Random();
             int nbCartesMerveille = 0;
             for(Quartier quartier : this.joueur.getCite()){
@@ -154,9 +138,9 @@ public abstract class Personnage {
                     if(this.joueur == this.plateau.getJoueur(0)){
                         Boolean reponse = Interaction.lireOuiOuNon();
                         if(reponse){
-                            joueur.retirerPieces(2);
+                            this.joueur.retirerPieces(2);
                             for(int i = 0; i < 3; i++){
-                                joueur.ajouterQuartierDansMain(this.plateau.getPioche().piocher());
+                                this.joueur.ajouterQuartierDansMain(this.plateau.getPioche().piocher());
                             }
 
                         }
@@ -166,9 +150,9 @@ public abstract class Personnage {
                         Boolean reponse = generateur.nextBoolean();
                         if(reponse){
                             System.out.println("oui");
-                            joueur.retirerPieces(2);
+                            this.joueur.retirerPieces(2);
                             for(int i = 0; i < 3; i++){
-                                joueur.ajouterQuartierDansMain(this.plateau.getPioche().piocher());
+                                this.joueur.ajouterQuartierDansMain(this.plateau.getPioche().piocher());
                             }
                         }
                     }
@@ -181,25 +165,25 @@ public abstract class Personnage {
                     System.out.println("***** Merveille : Laboratoire *****");
                     System.out.println();
                     System.out.println("Voulez-vous vous défaussez d'une carte pour recevoir 2 pièces d'or ? (o / oui ; n / non)");
-                    if(joueur == this.plateau.getJoueur(0)){
+                    if(this.joueur == this.plateau.getJoueur(0)){
                         Boolean reponse = Interaction.lireOuiOuNon();
                         if(reponse){
                             System.out.println("Quel quartier voulez-vous défausser ? (0 pour annuler)");
                             int j = 1;
-                            for(Quartier listeQuartier : joueur.getMainJoueur()){
+                            for(Quartier listeQuartier : this.joueur.getMainJoueur()){
                                 StringBuilder stringBuilder = new StringBuilder("\t " + j + ". " + listeQuartier.getNom() + " (Cout de construction " + listeQuartier.getCoutConstruction() + ")");
                                 System.out.println(stringBuilder);
                                 j++;
                             }
 
-                            int choix = Interaction.lireUnEntier(0, joueur.nbQuartiersDansMain() + 1);
+                            int choix = Interaction.lireUnEntier(0, this.joueur.nbQuartiersDansMain() + 1);
                             if(choix == 0){
                                 break;
                             }
                             else{
-                                this.plateau.getPioche().ajouter(joueur.getMainJoueur().get(choix - 1));
-                                joueur.retirerQuartierDansMain(choix - 1);
-                                joueur.ajouterPieces(2);
+                                this.plateau.getPioche().ajouter(this.joueur.getMainJoueur().get(choix - 1));
+                                this.joueur.retirerQuartierDansMain(choix - 1);
+                                this.joueur.ajouterPieces(2);
                             }
                         }
                     }
@@ -208,20 +192,20 @@ public abstract class Personnage {
                         if(reponse){
                             System.out.println("Quel quartier voulez-vous défausser ?");
                             int j = 1;
-                            for(Quartier listeQuartier : joueur.getMainJoueur()){
+                            for(Quartier listeQuartier : this.joueur.getMainJoueur()){
                                 StringBuilder stringBuilder = new StringBuilder("\t " + j + ". " + listeQuartier.getNom() + " (Cout de construction " + listeQuartier.getCoutConstruction() + ")");
                                 System.out.println(stringBuilder);
                                 j++;
                             }
 
-                            int choix = generateur.nextInt(joueur.nbQuartiersDansMain() + 1);
+                            int choix = generateur.nextInt(this.joueur.nbQuartiersDansMain() + 1);
                             if(choix == 0){
                                 break;
                             }
                             else{
-                                this.plateau.getPioche().ajouter(joueur.getMainJoueur().get(choix - 1));
-                                joueur.retirerQuartierDansMain(choix - 1);
-                                joueur.ajouterPieces(2);
+                                this.plateau.getPioche().ajouter(this.joueur.getMainJoueur().get(choix - 1));
+                                this.joueur.retirerQuartierDansMain(choix - 1);
+                                this.joueur.ajouterPieces(2);
                             }
                         }
                     }
@@ -242,7 +226,7 @@ public abstract class Personnage {
 
                     int choix = 0;
 
-                    if(joueur == this.plateau.getJoueur(0))
+                    if(this.joueur == this.plateau.getJoueur(0))
                         choix = Interaction.lireUnEntier(1, 6);
 
                     else
@@ -278,7 +262,13 @@ public abstract class Personnage {
             }
 
             if(nbCartesMerveille == 0){
-                System.out.println("Aucune merveille.");
+                System.out.println("Aucune merveille qui permet d'avoir une ressource spécifique");
+                System.out.println();
+            }
+
+            if(this.joueur.getPersonnage().getNom().equals("Assassin") || this.joueur.getPersonnage().getNom().equals("Voleur") || this.joueur.getPersonnage().getNom().equals("Magicienne")){
+                System.out.println("Pas de ressources spéicifiques liés à votre personnage");
+                System.out.println();
             }
         }
         else if(getJoueur() == null){
@@ -292,7 +282,6 @@ public abstract class Personnage {
         }
     }
 
-    // Méthode pour utiliser le pouvoir du personnage
     public void utiliserPouvoir() {
         if (getJoueur() != null && !getEstAssassine()) {
             System.out.println("Aucun pouvoir");
@@ -310,7 +299,6 @@ public abstract class Personnage {
 
     public abstract void utiliserPouvoirAvatar();
 
-    // Méthode pour réinitialiser les attributs joueur, estAssassine et estVole
     public void reinitialiser() {
         this.estAssassine = false;
         this.estVole = false;

@@ -11,17 +11,14 @@ public class Interaction {
         do {
             try {
                 i = sc.nextInt();
-                sc.nextLine();  // vide le scanner jusqu'à la fin de ligne
+                sc.nextLine();
                 return i;
             } catch (InputMismatchException e) {
                 System.out.print("Veuillez rentrer un entier : ");
-                sc.nextLine();  // vide le scanner jusqu'à la fin de ligne
+                sc.nextLine();
             }
         } while (true);
     }
-
-    // renvoie un entier lu au clavier compris dans l'intervalle
-    //     [borneMin, borneMax[
 
     public static int lireUnEntier(int borneMin, int borneMax) {
         int i = 0;
@@ -32,15 +29,14 @@ public class Interaction {
                     return i;
                 else
                     System.out.print("Veuillez rentrer un entier entre " + borneMin + " et " + (borneMax - 1) + " : ");
-                sc.nextLine();  // vide le scanner jusqu'à la fin de ligne
+                sc.nextLine();
             } catch (InputMismatchException e) {
                 System.out.print("Veuillez rentrer un entier : ");
-                sc.nextLine();  // vide le scanner jusqu'à la fin de ligne
+                sc.nextLine();
             }
         } while (true);
     }
 
-    // lit les réponses "oui", "non", "o" ou "n" et renvoie un booléen
     public static boolean lireOuiOuNon() {
         String s = "";
         boolean reponse;
@@ -64,7 +60,6 @@ public class Interaction {
         } while (true);
     }
 
-    // renvoie une chaîne de caractère lue au clavier :
     public static String lireUneChaine() {
         String s = "";
         do {

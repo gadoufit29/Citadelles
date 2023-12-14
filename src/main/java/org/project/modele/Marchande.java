@@ -10,24 +10,28 @@ public class Marchande extends Personnage{
     @Override
     public void percevoirRessourcesSpecifiques(){
         super.percevoirRessourcesSpecifiques();
-        System.out.println("Vous avez gagné 1 pièce pour votre rang de marchande.");
-        super.getJoueur().ajouterPieces(1);
-        ArrayList<Quartier> quartierDansCite = super.getJoueur().getCite();
-
-        int count = 0;
-        for(int i = 0 ; i < quartierDansCite.size() ; i++){
-            if(quartierDansCite.get(i).getType().equals("COMMERCANT")){
-                count++;
+        if(super.getJoueur() != null){
+            int nbQuartiersPourBonus = 0;
+            for(int i = 0 ; i < super.getJoueur().getCite().size() ; i++){
+                if(super.getJoueur().getCite().get(i).getType().equals("COMMERCANT")){
+                    super.getJoueur().ajouterPieces(1);
+                    nbQuartiersPourBonus++;
+                }
             }
-        }
 
-        super.getJoueur().ajouterPieces(count);
-        System.out.println("Vous avez gagné " + count + " pièce(s) car vous avez " + count + " quartier(s) de type COMMERCANT.");
+            if(nbQuartiersPourBonus > 0)
+                System.out.println("Vous avez gagné " + nbQuartiersPourBonus + " pièces grâce à votre personnage Marchande car vous avez " + nbQuartiersPourBonus + " quartiers de type COMMERCANT dans votre cité.");
+            else
+                System.out.println("Vous n'avez pas de quartiers de type COMMERCANT dans votre cité.");
+
+            System.out.println();
+        }
     }
 
     @Override
     public void utiliserPouvoir() {
-        super.utiliserPouvoir();
+        System.out.println("Vous avez gagné 1 pièce pour votre rang de marchande.");
+        super.getJoueur().ajouterPieces(1);
     }
 
     @Override

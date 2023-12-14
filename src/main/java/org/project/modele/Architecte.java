@@ -11,8 +11,13 @@ public class Architecte extends Personnage{
     @Override
     public void percevoirRessourcesSpecifiques() {
         super.percevoirRessourcesSpecifiques();
-        for (int i = 0 ; i < 2 ; i++){
-            super.getJoueur().ajouterQuartierDansMain(super.getPlateau().getPioche().piocher());
+        if(super.getJoueur() != null){
+            for (int i = 0 ; i < 2 ; i++){
+                super.getJoueur().ajouterQuartierDansMain(super.getPlateau().getPioche().piocher());
+            }
+
+            System.out.println("La ressource spécifique de votre personnage vous a permis de piocher 2 cartes supplémentaires");
+            System.out.println();
         }
     }
 

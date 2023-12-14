@@ -7,6 +7,8 @@ public class Configuration {
 
         Pioche nouvellePioche = new Pioche();
 
+        // Création des quartiers
+
         /* Religieux */
 
         Quartier quartier1 = new Quartier("Temple", Quartier.TYPE_QUARTIERS[0], 1);
@@ -86,6 +88,8 @@ public class Configuration {
         Quartier quartier53 = new Quartier("Hôtel de ville", Quartier.TYPE_QUARTIERS[3], 5);
         Quartier quartier54 = new Quartier("Hôtel de ville", Quartier.TYPE_QUARTIERS[3], 5);
 
+        // Ajout des quartiers à la pioche
+
         nouvellePioche.ajouter(quartier1);
         nouvellePioche.ajouter(quartier2);
         nouvellePioche.ajouter(quartier3);
@@ -145,7 +149,10 @@ public class Configuration {
     }
 
     public static PlateauDeJeu configurationDeBase() {
+        // Création de la pioche
         Pioche pioche = nouvellePioche();
+
+        // Création des merveilles
 
         Quartier merveille1 = new Quartier("Bibliothèque", Quartier.TYPE_QUARTIERS[4], 6);
         Quartier merveille2 = new Quartier("Carrière", Quartier.TYPE_QUARTIERS[4], 5);
@@ -163,6 +170,7 @@ public class Configuration {
         Quartier merveille14 = new Quartier("Tripot", Quartier.TYPE_QUARTIERS[4], 6);
 
 
+        // Ajout des merveilles à la pioche
         pioche.ajouter(merveille1);
         pioche.ajouter(merveille2);
         pioche.ajouter(merveille3);
@@ -180,6 +188,7 @@ public class Configuration {
 
         pioche.melanger();
 
+        // Création des personnages
         Personnage assassin = new Assassin();
         Personnage voleur = new Voleur();
         Personnage magicienne = new Magicienne();
@@ -189,7 +198,10 @@ public class Configuration {
         Personnage architecte = new Architecte();
         Personnage condottiere = new Condottiere();
 
+        // Création du plateau de jeu
         PlateauDeJeu plateau = new PlateauDeJeu(pioche);
+
+        // Ajout des personnages au plateau
         plateau.ajouterPersonnage(assassin);
         plateau.ajouterPersonnage(voleur);
         plateau.ajouterPersonnage(magicienne);

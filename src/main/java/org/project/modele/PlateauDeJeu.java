@@ -13,10 +13,8 @@ public class PlateauDeJeu {
         this.listePersonnages = new ArrayList<>();
         this.listeJoueurs = new ArrayList<>();
 
-        // Initialiser la pioche en créant une instance
         this.pioche = new Pioche();
 
-        // Initialiser les compteurs à zéro
         this.nbPersonnages = 0;
         this.nbJoueurs = 0;
     }
@@ -25,10 +23,8 @@ public class PlateauDeJeu {
         this.listePersonnages = new ArrayList<>();
         this.listeJoueurs = new ArrayList<>();
 
-        // Initialiser la pioche en créant une instance
         this.pioche = pioche;
 
-        // Initialiser les compteurs à zéro
         this.nbPersonnages = 0;
         this.nbJoueurs = 0;
     }
