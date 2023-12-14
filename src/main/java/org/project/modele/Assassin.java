@@ -17,7 +17,7 @@ public class Assassin extends Personnage{
         Boolean assassiner = Interaction.lireOuiOuNon();
 
         if(assassiner){
-            ArrayList<Personnage> listePersonnages = this.getPlateau().getListePersonnages();
+            ArrayList<Personnage> listePersonnages = super.getPlateau().getListePersonnages();
             do{
                 System.out.println("Liste des personnages : ");
                 int i = 1;
@@ -61,7 +61,7 @@ public class Assassin extends Personnage{
 
         if(utiliserPouvoir){
             System.out.println("oui");
-            ArrayList<Personnage> listePersonnages = this.getPlateau().getListePersonnages();
+            ArrayList<Personnage> listePersonnages = super.getPlateau().getListePersonnages();
             do{
                 System.out.println("Liste des personnages : ");
                 int i = 1;

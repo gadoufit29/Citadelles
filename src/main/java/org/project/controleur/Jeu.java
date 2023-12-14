@@ -6,7 +6,11 @@ import org.project.modele.Personnage;
 import org.project.modele.PlateauDeJeu;
 import org.project.modele.Quartier;
 import org.project.utils.Colors;
+
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Jeu{
@@ -14,6 +18,7 @@ public class Jeu{
     private int numeroConfiguration;
     private Random generateur;
 
+    private ArrayList<Joueur> listeJoueursFinPartie = new ArrayList<>();
     public Jeu(){
         this.plateauDeJeu = new PlateauDeJeu();
         this.numeroConfiguration = 0;
@@ -46,7 +51,7 @@ public class Jeu{
     private void afficherLesRegles(){
         System.out.println("Voici les règles du jeu : ");
         System.out.println();
-        System.out.println("Le but du jeu est d'être le premier à construire 8 quartiers dans sa cité.");
+        System.out.println("Le but du jeu est d'être le premier à construire 7 quartiers dans sa cité.");
         System.out.println("Pour cela, chaque joueur va incarner un personnage qui aura un pouvoir particulier.");
     }
 
@@ -79,11 +84,23 @@ public class Jeu{
         Quartier quartier0 = new Quartier("Temple", Quartier.TYPE_QUARTIERS[0], 1);
         joueur1.ajouterQuartierDansCite(quartier0);
 
+        Quartier quartier4 = new Quartier("Temple", Quartier.TYPE_QUARTIERS[0], 1);
+        joueur1.ajouterQuartierDansCite(quartier4);
+
+        Quartier quartier5 = new Quartier("École de Magie", Quartier.TYPE_QUARTIERS[4], 1);
+        joueur1.ajouterQuartierDansCite(quartier5);
+
         Quartier quartier2 = new Quartier("Tripot", Quartier.TYPE_QUARTIERS[4], 6);
-        joueur1.ajouterQuartierDansMain(quartier2);
+        joueur1.ajouterQuartierDansCite(quartier2);
 
         Quartier quartier1 = new Quartier("Manufacture", Quartier.TYPE_QUARTIERS[4], 1);
         joueur1.ajouterQuartierDansCite(quartier1);
+
+        Quartier quartier6 = new Quartier("Manufacture", Quartier.TYPE_QUARTIERS[4], 1);
+        joueur1.ajouterQuartierDansCite(quartier6);
+
+        Quartier quartier7 = new Quartier("Manufacture", Quartier.TYPE_QUARTIERS[4], 1);
+        joueur1.ajouterQuartierDansCite(quartier7);
 
         //Quartier quartier4 = new Quartier("Forge", Quartier.TYPE_QUARTIERS[0], 1);
         //joueur1.ajouterQuartierDansCite(quartier4);
@@ -108,6 +125,7 @@ public class Jeu{
             Quartier carte = this.plateauDeJeu.getPioche().piocher();
             joueur4.ajouterQuartierDansMain(carte);
         }
+
 
         int choixCouronne = generateur.nextInt(4);
 
@@ -136,25 +154,35 @@ public class Jeu{
         System.out.println("Choix des personnages : ");
         ArrayList<Personnage> listePersonnages = new ArrayList<>(this.plateauDeJeu.getListePersonnages());
 
-        for (int index = 0; index < 3; index++) {
-            int indice = generateur.nextInt(listePersonnages.size());
+        boolean roiTrouve;
+        do {
+            roiTrouve = false;
+            for (int index = 0; index < 3; index++) {
+                int indice = generateur.nextInt(listePersonnages.size());
+                Personnage personnage = listePersonnages.get(indice);
 
-            if (index < 2) {
-                System.out.println("Le personnage " + listePersonnages.get(indice).getNom() + " est écarté face visible");
-                if(listePersonnages.get(indice).getNom().equals("Roi")){
-                    System.out.println("Le roi est présent dans les cartes faces visibles. Redémarrage de la partie");
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                if (index < 2) {
+                    System.out.println("Le personnage " + personnage.getNom() + " est écarté face visible");
+                    if (personnage.getNom().equals("Roi")) {
+                        System.out.println("Le roi est présent dans les cartes faces visibles. Redémarrage de la partie");
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            System.out.println("Interruption détectée, sortie de la fonction.");
+                            return;
+                        }
+                        return;
                     }
-                    choixPersonnages();
                 }
-            } else {
-                System.out.println("Un personnage est écarté face cachée");
+
+                else {
+                    System.out.println("Un personnage est écarté face cachée");
+                }
+
+                listePersonnages.remove(personnage);
             }
-            listePersonnages.remove(indice);
-        }
+        } while (roiTrouve);
+
         System.out.println();
 
         int indexOfCrown = 0;
@@ -164,496 +192,348 @@ public class Jeu{
             }
         }
 
-        for(int i = indexOfCrown; i < this.plateauDeJeu.getNbJoueurs(); i++){
+        System.out.println(indexOfCrown);
 
-            if(this.plateauDeJeu.getJoueur(i).getPersonnage() == null && this.plateauDeJeu.getJoueur(i).getPossedeCouronne()){
+        int nbJoueurs = this.plateauDeJeu.getNbJoueurs();
+        for (int i = 0; i < nbJoueurs; i++) {
+            int indexJoueur = (indexOfCrown + i) % nbJoueurs;
+            Joueur joueurActuel = this.plateauDeJeu.getJoueur(indexJoueur);
 
-                System.out.println();
-                System.out.println("****************************************");
-                System.out.println("Tour de " + this.plateauDeJeu.getJoueur(i).getNom());
-                System.out.println("****************************************");
-                System.out.println();
+            System.out.println("\n****************************************");
+            System.out.println("Tour de " + joueurActuel.getNom());
+            System.out.println("****************************************\n");
 
-                System.out.println(this.plateauDeJeu.getJoueur(i).getNom() + " a la couronne !");
-                System.out.println();
-                int j = 1;
-                for(Personnage personnage : listePersonnages){
-                    StringBuilder stringBuilder = new StringBuilder("\t " + j + ". " + personnage.getNom() + " (Rang " + personnage.getRang() + ")");
-                    System.out.println(stringBuilder);
-                    j++;
-                }
-
-                System.out.println();
-                System.out.println("Quel personnage voulez-vous incarner ?");
-
-                if(plateauDeJeu.getJoueur(i).getNom() == this.plateauDeJeu.getJoueur(0).getNom()){
-                    int choixPersonnage = Interaction.lireUnEntier(1, listePersonnages.size() + 1);
-                    listePersonnages.get(choixPersonnage - 1).setJoueur(this.plateauDeJeu.getJoueur(0));
-                    System.out.println(this.plateauDeJeu.getJoueur(i).getNom() + " a choisi d'incarner " + listePersonnages.get(choixPersonnage - 1).getNom());
-                    listePersonnages.remove(choixPersonnage - 1);
-                }
-
-                else{
-                    int choixPersonnage = generateur.nextInt(listePersonnages.size()) + 1;
-                    System.out.println(choixPersonnage);
-                    listePersonnages.get(choixPersonnage - 1).setJoueur(this.plateauDeJeu.getJoueur(i));
-                    System.out.println(this.plateauDeJeu.getJoueur(i).getNom() + " a choisi d'incarner " + listePersonnages.get(choixPersonnage - 1).getNom());
-                    listePersonnages.remove(choixPersonnage - 1);
-                }
+            if (joueurActuel.getPersonnage() == null && joueurActuel.getPossedeCouronne()) {
+                System.out.println(joueurActuel.getNom() + " a la couronne !\n");
             }
 
-            else if(this.plateauDeJeu.getJoueur(i).getPersonnage() == null && !this.plateauDeJeu.getJoueur(i).getPossedeCouronne()){
-
-                System.out.println();
-                System.out.println("****************************************");
-                System.out.println("Tour de " + this.plateauDeJeu.getJoueur(i).getNom());
-                System.out.println("****************************************");
-                System.out.println();
-
-                int j = 1;
-                for(Personnage personnage : listePersonnages){
-                    StringBuilder stringBuilder = new StringBuilder("\t " + j + ". " + personnage.getNom() + " (Rang " + personnage.getRang() + ")");
-                    System.out.println(stringBuilder);
-                    j++;
-                }
-
-                System.out.println();
-                System.out.println("Quel personnage voulez-vous incarner ?");
-
-                if(plateauDeJeu.getJoueur(i).getNom() == this.plateauDeJeu.getJoueur(0).getNom()){
-                    int choixPersonnage = Interaction.lireUnEntier(1, listePersonnages.size() + 1);
-                    listePersonnages.get(choixPersonnage - 1).setJoueur(this.plateauDeJeu.getJoueur(0));
-                    System.out.println(this.plateauDeJeu.getJoueur(i).getNom() + " a choisi d'incarner " + listePersonnages.get(choixPersonnage - 1).getNom());
-                    listePersonnages.remove(choixPersonnage - 1);
-                }
-
-                else{
-                    int choixPersonnage = generateur.nextInt(listePersonnages.size()) + 1;
-                    System.out.println(choixPersonnage);
-                    listePersonnages.get(choixPersonnage - 1).setJoueur(this.plateauDeJeu.getJoueur(i));
-                    System.out.println(this.plateauDeJeu.getJoueur(i).getNom() + " a choisi d'incarner " + listePersonnages.get(choixPersonnage - 1).getNom());
-                    listePersonnages.remove(choixPersonnage - 1);
-                }
+            // Affichage des personnages disponibles
+            for (int j = 0; j < listePersonnages.size(); j++) {
+                Personnage personnage = listePersonnages.get(j);
+                System.out.println("\t" + (j + 1) + ". " + personnage.getNom() + " (Rang " + personnage.getRang() + ")");
             }
-        }
 
-        for(int i = 0 ; i < indexOfCrown; i++) {
-            if (this.plateauDeJeu.getJoueur(i).getPersonnage() == null && !this.plateauDeJeu.getJoueur(i).getPossedeCouronne()) {
+            System.out.println("\nQuel personnage voulez-vous incarner ?");
 
-                System.out.println();
-                System.out.println("****************************************");
-                System.out.println("Tour de " + this.plateauDeJeu.getJoueur(i).getNom());
-                System.out.println("****************************************");
-                System.out.println();
-
-                int j = 1;
-                for (Personnage personnage : listePersonnages) {
-                    StringBuilder stringBuilder = new StringBuilder("\t " + j + ". " + personnage.getNom() + " (Rang " + personnage.getRang() + ")");
-                    System.out.println(stringBuilder);
-                    j++;
-                }
-
-                System.out.println();
-                System.out.println("Quel personnage voulez-vous incarner ?");
-
-                if (plateauDeJeu.getJoueur(i).getNom() == this.plateauDeJeu.getJoueur(0).getNom()) {
-                    int choixPersonnage = Interaction.lireUnEntier(1, listePersonnages.size() + 1);
-                    listePersonnages.get(choixPersonnage - 1).setJoueur(this.plateauDeJeu.getJoueur(0));
-                    System.out.println(this.plateauDeJeu.getJoueur(i).getNom() + " a choisi d'incarner " + listePersonnages.get(choixPersonnage - 1).getNom());
-                    listePersonnages.remove(choixPersonnage - 1);
-                } else {
-                    int choixPersonnage = generateur.nextInt(listePersonnages.size()) + 1;
-                    System.out.println(choixPersonnage);
-                    listePersonnages.get(choixPersonnage - 1).setJoueur(this.plateauDeJeu.getJoueur(i));
-                    System.out.println(this.plateauDeJeu.getJoueur(i).getNom() + " a choisi d'incarner " + listePersonnages.get(choixPersonnage - 1).getNom());
-                    listePersonnages.remove(choixPersonnage - 1);
-                }
+            int choixPersonnage;
+            if (joueurActuel.getNom().equals(this.plateauDeJeu.getJoueur(0).getNom())) {
+                choixPersonnage = Interaction.lireUnEntier(1, listePersonnages.size() + 1);
+            } else {
+                choixPersonnage = generateur.nextInt(listePersonnages.size()) + 1;
+                System.out.println(choixPersonnage);
             }
-            else if (this.plateauDeJeu.getJoueur(i).getPersonnage() != null) {
-                return;
-            }
+
+            Personnage personnageChoisi = listePersonnages.get(choixPersonnage - 1);
+            personnageChoisi.setJoueur(joueurActuel);
+            System.out.println(joueurActuel.getNom() + " a choisi d'incarner " + personnageChoisi.getNom());
+            listePersonnages.remove(choixPersonnage - 1);
         }
     }
 
-    private void tourDeJeu(){
+    private void tourDeJeu() {
         ArrayList<Personnage> listePersonnage = new ArrayList<>(this.plateauDeJeu.getListePersonnages());
 
-        for(int i = 0; i < listePersonnage.size(); i++){
+        for (Personnage personnage : listePersonnage) {
+            Joueur joueurDuTour = personnage.getJoueur();
 
-            if(listePersonnage.get(i).getJoueur() != null){
-
-                Joueur joueurDuTour = listePersonnage.get(i).getJoueur();
-
-                System.out.println();
-                System.out.println("****************************************");
+            if (joueurDuTour != null) {
+                System.out.println("\n****************************************");
                 System.out.println("Tour de " + joueurDuTour.getNom());
-                System.out.println("****************************************");
-                System.out.println();
+                System.out.println("****************************************\n");
 
-                System.out.println("C'est au tour de " + joueurDuTour.getNom() + " d'incarner le personnage " + joueurDuTour.getPersonnage().getNom());
-                System.out.println();
+                System.out.println("C'est au tour de " + joueurDuTour.getNom() + " d'incarner le personnage " + joueurDuTour.getPersonnage().getNom() + "\n");
 
-                if(joueurDuTour.getPersonnage().getEstAssassine()){
-                    System.out.println("Vous avez eté assassiné !");
-                    System.out.println();
+                if (personnage.getEstAssassine()) {
+                    System.out.println("Vous avez été assassiné !\n");
                     continue;
                 }
-                if(joueurDuTour.getPersonnage().getEstVole()){
-                    System.out.println("Vous avez été volé !");
-                    System.out.println();
+
+                if (personnage.getEstVole()) {
+                    System.out.println("Vous avez été volé !\n");
                     joueurDuTour.retirerPieces(joueurDuTour.getTresor());
-                    for(int k = 0; k < this.plateauDeJeu.getNbJoueurs(); k++){
-                        if(this.plateauDeJeu.getJoueur(k).getPersonnage().getNom().equals("Voleur")){
-                            this.plateauDeJeu.getJoueur(k).ajouterPieces(joueurDuTour.getTresor());
+                    for (Joueur joueurPlateau : this.plateauDeJeu.getListeJoueurs()) {
+                        if (joueurPlateau.getPersonnage().getNom().equals("Voleur")) {
+                            joueurPlateau.ajouterPieces(joueurDuTour.getTresor());
                         }
                     }
                 }
 
-                if(joueurDuTour.getNom() == this.plateauDeJeu.getJoueur(0).getNom()){
+                // Percevoir ressources et utiliser pouvoir
+                if (joueurDuTour.getNom().equals(this.plateauDeJeu.getJoueur(0).getNom())) {
                     percevoirRessources(joueurDuTour.getPersonnage());
-                    System.out.println();
-                }
-
-                else{
-                    percevoirRessourcesAvatar(joueurDuTour.getPersonnage());
-                    System.out.println();
-                }
-
-                joueurDuTour.getPersonnage().percevoirRessourcesSpecifiques();
-
-                if(joueurDuTour.getNom() == this.plateauDeJeu.getJoueur(0).getNom()){
+                    joueurDuTour.getPersonnage().percevoirRessourcesSpecifiques();
                     joueurDuTour.getPersonnage().utiliserPouvoir();
-                    System.out.println();
+                    construire(joueurDuTour.getPersonnage());
                 }
 
-                else{
+                else {
+                    percevoirRessourcesAvatar(joueurDuTour.getPersonnage());
                     joueurDuTour.getPersonnage().utiliserPouvoirAvatar();
-                    System.out.println();
+                    joueurDuTour.getPersonnage().percevoirRessourcesSpecifiques();
+                    construireAvatar(joueurDuTour.getPersonnage());
                 }
 
-                if(joueurDuTour.getNom() == this.plateauDeJeu.getJoueur(0).getNom()){
-                    for(int j = 0 ; j < joueurDuTour.getPersonnage().getNbPermisDeConstruire() ; j++){
-                        construire(joueurDuTour.getPersonnage());
-                        System.out.println();
-                    }
+                if(joueurDuTour.getCite().size() >= 7){
+                    listeJoueursFinPartie.add(joueurDuTour);
                 }
-                else{
-                    construireAvatar(joueurDuTour.getPersonnage());
-                    System.out.println();
-                }
+
+                System.out.println();
             }
         }
-        System.out.println();
-        System.out.println();
     }
-    private void percevoirRessources(Personnage p){
+
+    private void percevoirRessources(Personnage p) {
         System.out.println("Perception des ressources");
         System.out.println("\t 1. Percevoir 2 pièces" +
-                            "\n \t 2. Piocher 2 cartes");
+                "\n \t 2. Piocher 2 cartes");
         int choix = Interaction.lireUnEntier(1, 3);
-        switch (choix){
-            case 1:
-                p.ajouterPieces();
-                break;
-            case 2:
-                Quartier carte1 = this.plateauDeJeu.getPioche().piocher();
-                Quartier carte2 = this.plateauDeJeu.getPioche().piocher();
 
-                System.out.println("Voici les deux cartes que vous avez pioché : ");
-                System.out.println("\t 1. " + carte1.getNom() + " (coût de construction : " + carte1.getCoutConstruction() + ")");
-                System.out.println("\t 2. " + carte2.getNom() + " (coût de construction : " + carte2.getCoutConstruction() + ")");
-                System.out.println();
+        if (choix == 1) {
+            p.ajouterPieces();
+        } else if (choix == 2) {
+            Quartier carte1 = this.plateauDeJeu.getPioche().piocher();
+            Quartier carte2 = this.plateauDeJeu.getPioche().piocher();
 
-                if(p.getJoueur().getCite().isEmpty()){
-                    System.out.println("Quelle carte voulez-vous garder ?");
-                    int choixCarte = Interaction.lireUnEntier(1, 3);
-                    switch (choixCarte){
-                        case 1:
-                            p.ajouterQuartierDansMain(carte1);
-                            break;
-                        case 2:
-                            p.ajouterQuartierDansMain(carte2);
-                            break;
-                    }
-                    break;
+            System.out.println("Voici les deux cartes que vous avez pioché : ");
+            System.out.println("\t 1. " + carte1.getNom() + " (coût de construction : " + carte1.getCoutConstruction() + ")");
+            System.out.println("\t 2. " + carte2.getNom() + " (coût de construction : " + carte2.getCoutConstruction() + ")");
+            System.out.println();
+
+            boolean bibliothequeDansCite = p.getJoueur().getCite().stream().anyMatch(quartier -> quartier.getNom().equals("bibliothequeDansCite"));
+
+            if (!bibliothequeDansCite) {
+                System.out.println("Quelle carte voulez-vous garder ?");
+                int choixCarte = Interaction.lireUnEntier(1, 3);
+                if (choixCarte == 1) {
+                    p.ajouterQuartierDansMain(carte1);
+                } else {
+                    p.ajouterQuartierDansMain(carte2);
                 }
+            }
 
-                else{
-                    for(Quartier quartier : p.getJoueur().getCite()){
-                        if(quartier.getNom().equals("Bibliothèque")){
-                            System.out.println("Vous avez une bibliothèque dans votre cité. Vous gardez les deux cartes");
-                            p.getJoueur().ajouterQuartierDansMain(carte1);
-                            p.getJoueur().ajouterQuartierDansMain(carte2);
-                            return;
-                        }
-                    }
-
-                    System.out.println("Quelle carte voulez-vous garder ?");
-                    int choixCarte = Interaction.lireUnEntier(1, 3);
-                    switch (choixCarte){
-                        case 1:
-                            p.ajouterQuartierDansMain(carte1);
-                            break;
-                        case 2:
-                            p.ajouterQuartierDansMain(carte2);
-                            break;
-                    }
-
-                    break;
-                }
+            else {
+                System.out.println("Vous avez une bibliothèque dans votre cité. Vous gardez les deux cartes");
+                p.getJoueur().ajouterQuartierDansMain(carte1);
+                p.getJoueur().ajouterQuartierDansMain(carte2);
+            }
         }
     }
+
 
     private void percevoirRessourcesAvatar(Personnage p){
         System.out.println("Perception des ressources");
         System.out.println("\t 1. Percevoir 2 pièces" +
-                            "\n \t 2. Piocher 2 cartes");
+                "\n \t 2. Piocher 2 cartes");
         int choix = generateur.nextInt(2) + 1;
-        System.out.println(choix);
-        switch (choix){
-            case 1:
-                p.ajouterPieces();
-                System.out.println();
-                break;
-            case 2:
-                Quartier carte1 = this.plateauDeJeu.getPioche().piocher();
-                Quartier carte2 = this.plateauDeJeu.getPioche().piocher();
 
-                System.out.println("Voici les deux cartes que vous avez pioché : ");
-                System.out.println("\t 1. " + carte1.getNom() + " (coût de construction : " + carte1.getCoutConstruction() + ")");
-                System.out.println("\t 2. " + carte2.getNom() + " (coût de construction : " + carte2.getCoutConstruction() + ")");
-                System.out.println();
+        if (choix == 1) {
+            p.ajouterPieces();
+        } else if (choix == 2) {
+            Quartier carte1 = this.plateauDeJeu.getPioche().piocher();
+            Quartier carte2 = this.plateauDeJeu.getPioche().piocher();
 
-                if(p.getJoueur().getCite().isEmpty()){
-                    System.out.println("Quelle carte voulez-vous garder ?");
-                    int choixCarte = generateur.nextInt(2) + 1;
-                    System.out.println(choixCarte);
-                    switch (choixCarte){
-                        case 1:
-                            p.ajouterQuartierDansMain(carte1);
-                            break;
-                        case 2:
-                            p.ajouterQuartierDansMain(carte2);
-                            break;
-                    }
-                    break;
+            System.out.println("Voici les deux cartes que vous avez pioché : ");
+            System.out.println("\t 1. " + carte1.getNom() + " (coût de construction : " + carte1.getCoutConstruction() + ")");
+            System.out.println("\t 2. " + carte2.getNom() + " (coût de construction : " + carte2.getCoutConstruction() + ")");
+            System.out.println();
+
+            boolean bibliothequeDansCite = p.getJoueur().getCite().stream().anyMatch(quartier -> quartier.getNom().equals("bibliothequeDansCite"));
+
+            if (!bibliothequeDansCite) {
+                System.out.println("Quelle carte voulez-vous garder ?");
+                int choixCarte = generateur.nextInt(2) + 1;
+                if (choixCarte == 1) {
+                    p.ajouterQuartierDansMain(carte1);
+                } else {
+                    p.ajouterQuartierDansMain(carte2);
                 }
+            }
 
-                else{
-                    for(Quartier quartier : p.getJoueur().getCite()){
-                        if(quartier.getNom().equals("Bibliothèque")){
-                            System.out.println("Vous avez une bibliothèque dans votre cité. Vous gardez les deux cartes");
-                            p.getJoueur().ajouterQuartierDansMain(carte1);
-                            p.getJoueur().ajouterQuartierDansMain(carte2);
-                            return;
-                        }
-                    }
-
-                    System.out.println("Quelle carte voulez-vous garder ?");
-                    int choixCarte = generateur.nextInt(2) + 1;
-                    System.out.println(choixCarte);
-                    switch (choixCarte){
-                        case 1:
-                            p.ajouterQuartierDansMain(carte1);
-                            break;
-                        case 2:
-                            p.ajouterQuartierDansMain(carte2);
-                            break;
-                    }
-
-                    break;
-                }
+            else {
+                System.out.println("Vous avez une bibliothèque dans votre cité. Vous gardez les deux cartes");
+                p.getJoueur().ajouterQuartierDansMain(carte1);
+                p.getJoueur().ajouterQuartierDansMain(carte2);
+            }
         }
     }
 
-    private void construire(Personnage p){
-        System.out.println("Souhaitez-vous construire un quartier ? (o/ oui ; n / non)");
-        Boolean construire = Interaction.lireOuiOuNon();
-        if(construire){
-            Boolean carriere = false;
-            Boolean manufacture = false;
-            Boolean tripot = false;
-            for(Quartier quartierCite : p.getJoueur().getCite()){
-                if(quartierCite.getNom().equals("Carrière"))
-                    carriere = true;
-
-                if(quartierCite.getNom().equals("Manufacture"))
-                    manufacture = true;
+    private void construire(Personnage p) {
+        if(!p.getJoueur().getMainJoueur().isEmpty()){
+            System.out.println("Souhaitez-vous construire un quartier ? (o/ oui ; n / non)");
+            if (!Interaction.lireOuiOuNon()) {
+                System.out.println("Vous ne construisez pas de quartier");
+                return;
             }
 
-            for(Quartier quartier : p.getJoueur().getMainJoueur()){
-                if(quartier.getNom().equals("Tripot"))
-                    tripot = true;
+            // Vérification de la présence de certains quartiers
+            Boolean carriere = false, manufacture = false;
+            for (Quartier quartier : p.getJoueur().getCite()) {
+                if (quartier.getNom().equals("Carrière")) carriere = true;
+                if (quartier.getNom().equals("Manufacture")) manufacture = true;
             }
 
-            System.out.println("Voici les cartes de votre main : ");
-            int i = 1;
-            for(Quartier quartier : p.getJoueur().getMainJoueur()){
-                System.out.println();
-                if(manufacture && quartier.getType().equals(Quartier.TYPE_QUARTIERS[4]))
-                    System.out.println("\t " + i + ". " + quartier.getNom() + " (coût de construction : " + Colors.ANSI_GREEN + (quartier.getCoutConstruction() - 1) + Colors.ANSI_RESET + ")");
-                else
-                    System.out.println("\t " + i + ". " + quartier.getNom() + " (coût de construction : " + quartier.getCoutConstruction() + ")");
-                i++;
-            }
-            System.out.println("Voici votre trésorerie : " + p.getJoueur().getTresor());
+            // Boucle pour la construction des quartiers
+            System.out.println("Quel quartier voulez-vous construire ? (0 pour ne pas construire de quartier)");
+            int nombreConstruction = 0;
+            while (nombreConstruction != p.getJoueur().getPersonnage().getNbPermisDeConstruire()) {
+                System.out.println("Votre main :");
+                // Affichage des cartes de la main du joueur
+                int i = 1;
+                for (Quartier quartier : p.getJoueur().getMainJoueur()) {
+                    int coutConstruction = quartier.getCoutConstruction() - (manufacture && quartier.getType().equals(Quartier.TYPE_QUARTIERS[4]) ? 1 : 0);
+                    System.out.println("\t " + i + ". " + quartier.getNom() + " (coût de construction : " + coutConstruction + ")");
+                    i++;
+                }
 
-            System.out.println();
+                i = 1;
 
-            if(carriere)
-                System.out.println("Vous avez une carte \"Carrière\" dans votre cité. Vous pouvez construire 2 quartiers identitques");
-            if(manufacture)
-                System.out.println("Vous avez une carte \"Manufacture\" dans votre cité. Vous payez une pièce d'or en moins pour construire une merveille");
-            if(tripot)
-                System.out.println("Vous avez une carte \"Tripot\" dans votre main. Vous pouvez payer tout ou partie du coût de construction du Tripot en cartes de votre main, au prix de 1 carte pour 1 pièce d’or.");
+                System.out.println("Votre cité : ");
+                // Affichage des cartes de la cité du joueur
+                for (Quartier quartier : p.getJoueur().getCite()) {
+                    System.out.println("\t " + i + ". " + quartier.getNom());
+                    i++;
+                }
+                System.out.println(Colors.ANSI_YELLOW + "Vous avez : " + p.getJoueur().getTresor() + " pièce(s) d'or" + Colors.ANSI_RESET);
 
-            do{
-                System.out.println("Quel quartier voulez-vous construire ? (0 pour ne pas construire de quartier)");
+                System.out.print("Quel quartier voulez-vous construire ? (0 pour ne pas construire de quartier) : ");
                 int choix = Interaction.lireUnEntier(0, p.getJoueur().nbQuartiersDansMain() + 1);
-                if(choix == 0)
-                    return;
+                if (choix == 0) return;
 
-                if(p.getJoueur().getMainJoueur().get(choix - 1).getNom().equals("Tripot")){
-                    int coutConstruction = p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction();
-                    if(manufacture){
-                        System.out.println("Vous payez le cout de construction du Tripot, 1 pièce d'or en moins grâce à votre merveille : Manufacture");
-                        if(coutConstruction != 0)
-                            coutConstruction -= 1;
+                Quartier quartierChoisi = p.getJoueur().getMainJoueur().get(choix - 1);
+                int coutConstruction = quartierChoisi.getCoutConstruction() - (manufacture && quartierChoisi.getType().equals(Quartier.TYPE_QUARTIERS[4]) ? 1 : 0);
+
+                // Traitement de la construction d'un quartier
+                if (quartierChoisi.getNom().equals("Tripot")) {
+                    int nbPieces = 0;
+                    if(p.getJoueur().getTresor() > 0){
+                        System.out.println("Souhaitez-vous utiliser des pièces pour la construction ? (o / oui ; n / non)");
+                        if (Interaction.lireOuiOuNon()) {
+                            System.out.println("Combien de pièces voulez-vous utiliser ?");
+                            nbPieces = Interaction.lireUnEntier(1, p.getJoueur().getTresor() + 1);
+
+                            if (nbPieces > p.getJoueur().getTresor()) {
+                                System.out.println("Vous ne pouvez pas payer plus de pièces que vous n'en avez");
+                                continue;
+                            }
+
+                            else if(nbPieces > coutConstruction) {
+                                System.out.println("Vous ne pouvez pas payer plus de pièces que le coût de construction du Tripot");
+                                continue;
+                            }
+
+                            else if (nbPieces == coutConstruction) {
+                                p.getJoueur().retirerPieces(nbPieces);
+                                p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                                p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                                nombreConstruction++;
+                                System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                                continue;
+                            }
+                        }
+
+                        else {
+                            System.out.println("Vous ne payez pas de pièces pour la construction du Tripot");
+                        }
                     }
 
-                    if(p.getJoueur().getMainJoueur().size() > 1){
-                        System.out.println("Voulez vous utiliser des cartes de votre main pour payer le Tripot ? (o / oui ; n / non)");
-                        if((p.getJoueur().getMainJoueur().size() + p.getJoueur().getTresor()) >= coutConstruction){
-                            Boolean utiliserCartes = Interaction.lireOuiOuNon();
-                            if(utiliserCartes){
-                                System.out.println("Voici les cartes de votre main : ");
-                                int j = 1;
-                                for(Quartier quartier : p.getJoueur().getMainJoueur()){
-                                    System.out.println("\t " + j + ". " + quartier.getNom() + " (coût de construction : " + quartier.getCoutConstruction() + ")");
-                                    j++;
-                                }
-
-                                System.out.println("Combien de cartes voulez-vous utiliser ?");
-                                int nombreCartes = Interaction.lireUnEntier(1, p.getJoueur().nbQuartiersDansMain() + 1);
-
-                                if(nombreCartes == p.getJoueur().getMainJoueur().size() - 1){
-                                    for(Quartier quartier : p.getJoueur().getMainJoueur()){
-                                        if(quartier.getNom() != "Tripot"){
-                                            this.plateauDeJeu.getPioche().ajouter(quartier);
-                                            p.getJoueur().getMainJoueur().remove(quartier);
-                                            if(coutConstruction != 0)
-                                                coutConstruction -= 1;
-                                        }
-                                    }
-                                }
-
-                                else{
-                                    for (int k = 0; k < nombreCartes; k++) {
-                                        System.out.println("Voici les cartes de votre main : ");
-                                        int l = 1;
-                                        for(Quartier quartier : p.getJoueur().getMainJoueur()){
-                                            System.out.println("\t " + l + ". " + quartier.getNom() + " (coût de construction : " + quartier.getCoutConstruction() + ")");
-                                            l++;
-                                        }
-                                        System.out.println("Carte n°" + (k+1) + " que voulez-vous utiliser : ");
-                                        int choixCarte = Interaction.lireUnEntier(1, p.getJoueur().nbQuartiersDansMain() + 1);
-
-                                        if(p.getJoueur().getMainJoueur().get(choixCarte - 1).getNom().equals("Tripot")){
-                                            System.out.println("Vous ne pouvez pas utiliser le Tripot pour payer le Tripot");
-                                            k--;
-                                        }
-
-                                        else{
-                                            this.plateauDeJeu.getPioche().ajouter(p.getJoueur().getMainJoueur().get(choixCarte - 1));
-                                            p.getJoueur().getMainJoueur().remove(choixCarte - 1);
-                                            if(coutConstruction != 0)
-                                                coutConstruction -= 1;
-                                        }
-                                    }
+                    if(nbPieces + (p.getJoueur().getMainJoueur().size() -  1) >= coutConstruction){
+                        ArrayList<Quartier> quartiersADefaite = new ArrayList<>();
+                        if (nbPieces == 0 && (p.getJoueur().getMainJoueur().size() - 1) == coutConstruction) {
+                            for (Quartier quartier : p.getJoueur().getMainJoueur()) {
+                                if (!quartier.getNom().equals("Tripot")) {
+                                    this.plateauDeJeu.getPioche().ajouter(quartier);
+                                    quartiersADefaite.add(quartier); // Ajoutez le quartier à la liste temporaire
                                 }
                             }
+
+                            for (Quartier quartier : quartiersADefaite) {
+                                p.getJoueur().getMainJoueur().remove(quartier);
+                            }
+
+                            p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                            p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                            nombreConstruction++;
+                            System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                            continue;
                         }
 
                         else{
-                            System.out.println("Vous n'avez pas assez de ressources pour payer le Tripot");
+                            int l = 0;
+                            do {
+                                int k = 1;
+                                for (Quartier quartier : p.getJoueur().getMainJoueur()) {
+                                    System.out.println("\t " + k + ". " + quartier.getNom());
+                                    k++;
+                                }
+                                System.out.println("Quartier n°" + (l+1) + "  a defausser : ");
+
+                                int choixQuartierDefausser = Interaction.lireUnEntier(1, p.getJoueur().getMainJoueur().size() + 1);
+
+                                if(p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1).getNom().equals("Tripot")){
+                                    System.out.println("Vous ne pouvez pas défausser le Tripot");
+                                    continue;
+                                }
+
+                                this.plateauDeJeu.getPioche().ajouter(p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1));
+                                System.out.println("Vous avez défaussé le quartier : " + p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1).getNom());
+                                System.out.println("Il vous reste " + (coutConstruction - nbPieces - (l+1)) + " quartier(s) à défausser");
+                                p.getJoueur().getMainJoueur().remove(p.getJoueur().getMainJoueur().get(choixQuartierDefausser - 1));
+                                l++;
+
+                            }while(nbPieces + l != coutConstruction);
+
+                            p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                            p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                            System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
                         }
 
-                        if(coutConstruction >= 0){
-                            System.out.println("Vous payez " + coutConstruction + " pièces d'or pour construire le Tripot");
-                            p.getJoueur().retirerPieces(coutConstruction);
-                            p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                            p.getJoueur().getMainJoueur().remove(choix - 1);
-                        }
+                        nombreConstruction++;
                     }
 
-                    if(p.getJoueur().getPersonnage().getNbPermisDeConstruire() == 1)
-                        return;
-                }
-
-                else{
-                    if(p.getJoueur().getCite().isEmpty()){
-                        if(p.getJoueur().getTresor() >= p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction()){
-                            p.getJoueur().retirerPieces(p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction());
-                            p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                            p.getJoueur().getMainJoueur().remove(choix - 1);
-                        }
-
-                        else
-                            System.out.println("Vous n'avez pas assez de pièces pour construire ce quartier");
-                    }
-
-                    else{
-                        for(Quartier quartier : p.getJoueur().getCite()){
-                            if(quartier.getNom().equals("Carrière")){
-                                if(p.getJoueur().getTresor() >= p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction()){
-                                    p.getJoueur().retirerPieces(p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction());
-                                    p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                                    p.getJoueur().getMainJoueur().remove(choix - 1);
-                                }
-
-                                else{
-                                    System.out.println("Vous n'avez pas assez de pièces pour construire ce quartier");
-                                }
-                            }
-
-                            if(quartier.getNom().equals("Manufacture")){
-                                if(p.getJoueur().getTresor() >= p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction() - 1){
-                                    p.getJoueur().retirerPieces(p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction());
-                                    p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                                    p.getJoueur().getMainJoueur().remove(choix - 1);
-                                    return;
-                                }
-
-                                else{
-                                    System.out.println("Vous n'avez pas assez de pièces pour construire ce quartier");
-                                    break;
-                                }
-                            }
-                        }
-
-                        for(Quartier quartier : p.getJoueur().getCite()){
-                            if(quartier.getNom().equals(p.getJoueur().getMainJoueur().get(choix - 1).getNom())){
-                                System.out.println("Vous avez déjà ce quartier dans votre cité");
-                                break;
-                            }
-
-                            if(p.getJoueur().getTresor() >= p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction()){
-                                p.getJoueur().retirerPieces(p.getJoueur().getMainJoueur().get(choix - 1).getCoutConstruction());
-                                p.getJoueur().ajouterQuartierDansCite(p.getJoueur().getMainJoueur().get(choix - 1));
-                                p.getJoueur().getMainJoueur().remove(choix - 1);
-                                return;
-                            }
-
-                            else
-                                System.out.println("Vous n'avez pas assez de pièces pour construire ce quartier");
-                        }
+                    else {
+                        System.out.println("Vous ne pouvez pas construire le Tripot (Pas assez de pièces et/ou de quartiers à défausser)");
                     }
                 }
-            }while (true);
+
+                else if (carriere) {
+                    // Logique de construction pour les autres quartiers
+                    if (p.getJoueur().getTresor() >= coutConstruction) {
+                        p.getJoueur().retirerPieces(coutConstruction);
+                        p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                        p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                    }
+
+                    else {
+                        System.out.println("Vous ne pouvez pas construire ce quartier (Pas assez de pièces)");
+                        continue;
+                    }
+
+                    System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                    nombreConstruction++;
+
+                } else {
+                    // Logique de construction pour les autres quartiers
+                    if (p.getJoueur().getTresor() >= coutConstruction) {
+                        p.getJoueur().retirerPieces(coutConstruction);
+                        p.getJoueur().ajouterQuartierDansCite(quartierChoisi);
+                        p.getJoueur().getMainJoueur().remove(quartierChoisi);
+                    }
+
+                    else {
+                        System.out.println("Vous ne pouvez pas construire ce quartier (Pas assez de pièces)");
+                        continue;
+                    }
+
+                    System.out.println("Vous avez construit le quartier : \"" + quartierChoisi.getNom() + "\" !");
+                    nombreConstruction++;
+                }
+            }
         }
-        else
-            System.out.println("Vous ne construisez pas de quartier");
+        else{
+            System.out.println("Vous n'avez pas de quartier dans votre main");
+        }
     }
+
     private void construireAvatar(Personnage p){
         System.out.println("Souhaitez-vous construire un quartier ? (o/ oui ; n / non)");
         Boolean construire = generateur.nextBoolean();
@@ -775,15 +655,132 @@ public class Jeu{
 
     private boolean partieFinie(){
         for(Joueur joueur : this.plateauDeJeu.getListeJoueurs()){
-            if(joueur.nbQuartiersDansCite() >= 8){
-                System.out.println("La partie est terminée !");
-                System.out.println("Le joueur " + joueur.getNom() + " a gagné !");
+            if(joueur.nbQuartiersDansCite() >= 7){
                 return true;
             }
         }
         return false;
     }
 
-    private void calculDesPoints(){
+    private void calculDesPoints() {
+        System.out.println("****************************************");
+        System.out.println("************** FIN DE PARTIE **************");
+        System.out.println("****************************************");
+        System.out.println();
+
+        Map<Joueur, Integer> scoreJoueurs = new HashMap<>();
+
+        for (Joueur joueur : this.plateauDeJeu.getListeJoueurs()) {
+            int nbPoints = 0;
+            for (Quartier quartier : joueur.getCite()) {
+                nbPoints += quartier.getCoutConstruction();
+            }
+
+            System.out.println("Le joueur " + joueur.getNom() + " gagne " + nbPoints + " point(s) pour le cout total de ses quartiers construits dans sa cité.");
+
+            for (Quartier quartier : joueur.getCite()) {
+                if(quartier.getNom().equals("Cour des Miracles")){
+                    System.out.println("Le joueur " + joueur.getNom() + " a construit la Cour des Miracles !");
+                    System.out.println("Choisis de quel type tu veux que ta merveille soit (Attention, tu ne pourras plus changer) : ");
+                    System.out.println("\t 1. Religieux");
+                    System.out.println("\t 2. Militaire");
+                    System.out.println("\t 3. Noble");
+                    System.out.println("\t 4. Commerçant");
+                    System.out.println("\t 5. Merveille");
+
+                    int choix = Interaction.lireUnEntier(1, 6);
+
+                    switch (choix){
+                        case 1:
+                            System.out.println("\"La Cour des Miracles\" a pour ce tour le type suivant : Religieux.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[0]);
+                            break;
+                        case 2:
+                            System.out.println("\"La Cour des Miracles\" a pour ce tour le type suivant : Militaire.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[1]);
+                            break;
+                        case 3:
+                            System.out.println("\"La Cour des Miracles\" a pour ce tour le type suivant : Noble.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[2]);
+                            break;
+                        case 4:
+                            System.out.println("\"La Cour des Miracles\" a pour ce tour le type suivant : Commerçant.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[3]);
+                            break;
+                        default:
+                            System.out.println("\"La Cour des Miracles\" reste inchangée (Type : Merveille).");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[4]);
+                            break;
+                    }
+
+                    nbPoints += 1;
+                }
+            }
+
+            for (Quartier quartier : joueur.getCite()) {
+                if (quartier.getType().equals(Quartier.TYPE_QUARTIERS[0]) && quartier.getType().equals(Quartier.TYPE_QUARTIERS[1]) && quartier.getType().equals(Quartier.TYPE_QUARTIERS[2]) && quartier.getType().equals(Quartier.TYPE_QUARTIERS[3]) && quartier.getType().equals(Quartier.TYPE_QUARTIERS[4])){
+                    System.out.println("Le joueur " + joueur.getNom() + " a construit les 5 types de quartiers ! Il gagne 3 points.");
+                    nbPoints += 3;
+                }
+            }
+
+            for (int i = 0  ; i < listeJoueursFinPartie.size() ; i++){
+                if(joueur == listeJoueursFinPartie.get(0)){
+                    System.out.println("Le joueur " + joueur.getNom() + " a gagné la partie en premier ! Il gagne 4 points.");
+                    nbPoints += 4;
+                }
+                else{
+                    System.out.println("Le joueur " + joueur.getNom() + " n'a pas été le premier à compléter sa cité ! Il gagne 2 points.");
+                    nbPoints += 2;
+                }
+            }
+
+            for (Quartier quartier : joueur.getCite()) {
+                if(quartier.getNom().equals("Dracoport"))
+                    nbPoints += 2;
+
+                if(quartier.getNom().equals("Fontaine aux Souhaits")){
+                    for(Quartier quartierMerveille : joueur.getCite()){
+                        if(quartierMerveille.getType().equals(Quartier.TYPE_QUARTIERS[4])){
+                            nbPoints += 1;
+                        }
+                    }
+                }
+
+                if(quartier.getNom().equals("Salle des Cartes")){
+                    nbPoints += joueur.getMainJoueur().size();
+                }
+
+            }
+
+            if(joueur.getPossedeCouronne()){
+                nbPoints += 5;
+            }
+
+            nbPoints += joueur.getTresor();
+
+            System.out.println("Le joueur " + joueur.getNom() + " fini avec " + nbPoints + " point(s) !");
+
+            scoreJoueurs.put(joueur, nbPoints);
+        }
+
+        // Convertir la Map en une liste d'entrées pour le tri
+        ArrayList<Map.Entry<Joueur, Integer>> listeScoreJoueurs = new ArrayList<>(scoreJoueurs.entrySet());
+
+        // Trier la liste en fonction des scores
+        listeScoreJoueurs.sort((e1, e2) -> e2.getValue().compareTo(e1.getValue()));
+
+        // Afficher les joueurs et leurs scores dans l'ordre décroissant
+        System.out.println();
+        System.out.println("****************************************");
+        System.out.println("************** CLASSEMENT **************");
+        System.out.println("****************************************");
+        System.out.println();
+        for (Map.Entry<Joueur, Integer> entry : listeScoreJoueurs) {
+            Joueur joueur = entry.getKey();
+            Integer score = entry.getValue();
+            System.out.println("Joueur: " + joueur.getNom() + ", Score: " + score);
+            System.out.println();
+        }
     }
 }

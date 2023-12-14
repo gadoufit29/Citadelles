@@ -11,11 +11,11 @@ public class Eveque extends Personnage{
     @Override
     public void percevoirRessourcesSpecifiques() {
         super.percevoirRessourcesSpecifiques();
-        ArrayList<Quartier> quartierDansCite = this.getJoueur().getCite();
+        ArrayList<Quartier> quartierDansCite = super.getJoueur().getCite();
 
         for(int i = 0 ; i < quartierDansCite.size() ; i++){
             if(quartierDansCite.get(i).getType().equals("RELIGIEUX")){
-                this.getJoueur().ajouterPieces(1);
+                super.getJoueur().ajouterPieces(1);
             }
         }
 

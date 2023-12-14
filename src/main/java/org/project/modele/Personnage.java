@@ -140,10 +140,16 @@ public abstract class Personnage {
     // Méthode pour percevoir les ressources spécifiques du personnage
     public void percevoirRessourcesSpecifiques() {
         if (getJoueur() != null && !getEstAssassine()) {
+            System.out.println();
+            System.out.println("********* RESSOURCES SPECIFIQUES *********");
+            System.out.println();
             Random generateur = new Random();
             int nbCartesMerveille = 0;
             for(Quartier quartier : this.joueur.getCite()){
                 if(quartier.getNom().equals("Forge")){
+                    System.out.println();
+                    System.out.println("***** Merveille : Forge *****");
+                    System.out.println();
                     System.out.println("Voulez-vous payer 2 pièces d'or pour piocher 3 cartes ? (o / oui ; n / non)");
                     if(this.joueur == this.plateau.getJoueur(0)){
                         Boolean reponse = Interaction.lireOuiOuNon();
@@ -171,6 +177,9 @@ public abstract class Personnage {
                 }
 
                 if(quartier.getNom().equals("Laboratoire")){
+                    System.out.println();
+                    System.out.println("***** Merveille : Laboratoire *****");
+                    System.out.println();
                     System.out.println("Voulez-vous vous défaussez d'une carte pour recevoir 2 pièces d'or ? (o / oui ; n / non)");
                     if(joueur == this.plateau.getJoueur(0)){
                         Boolean reponse = Interaction.lireOuiOuNon();
@@ -210,15 +219,54 @@ public abstract class Personnage {
                                 break;
                             }
                             else{
-                            this.plateau.getPioche().ajouter(joueur.getMainJoueur().get(choix - 1));
-                            joueur.retirerQuartierDansMain(choix - 1);
-                            joueur.ajouterPieces(2);
+                                this.plateau.getPioche().ajouter(joueur.getMainJoueur().get(choix - 1));
+                                joueur.retirerQuartierDansMain(choix - 1);
+                                joueur.ajouterPieces(2);
                             }
                         }
                     }
 
                     nbCartesMerveille++;
                 }
+
+                if(quartier.getNom().equals("École de Magie")){
+                    System.out.println();
+                    System.out.println("***** Merveille : École de Magie *****");
+                    System.out.println();
+                    System.out.println("Quel type de quartier voulez-vous que votre merveille \"École de Magie\" prenne durant ce tour ?");
+                    System.out.println("\t 1. Religieux");
+                    System.out.println("\t 2. Militaire");
+                    System.out.println("\t 3. Noble");
+                    System.out.println("\t 4. Commerçant");
+                    System.out.println("\t 5. Merveille");
+
+                    int choix = Interaction.lireUnEntier(1, 6);
+                    switch (choix){
+                        case 1:
+                            System.out.println("\"L'École de magie\" a pour ce tour le type suivant : Religieux.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[0]);
+                            break;
+                        case 2:
+                            System.out.println("\"L'École de magie\" a pour ce tour le type suivant : Militaire.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[1]);
+                            break;
+                        case 3:
+                            System.out.println("\"L'École de magie\" a pour ce tour le type suivant : Noble.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[2]);
+                            break;
+                        case 4:
+                            System.out.println("\"L'École de magie\" a pour ce tour le type suivant : Commerçant.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[3]);
+                            break;
+                        default:
+                            System.out.println("\"L'École de magie\" a pour ce tour le type suivant : Merveille.");
+                            quartier.setType(Quartier.TYPE_QUARTIERS[4]);
+                            break;
+                    }
+                }
+
+                if(quartier.getType() == "MERVEILLE")
+                    nbCartesMerveille++;
             }
 
             if(nbCartesMerveille == 0){

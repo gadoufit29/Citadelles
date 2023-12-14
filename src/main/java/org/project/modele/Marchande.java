@@ -10,14 +10,19 @@ public class Marchande extends Personnage{
     @Override
     public void percevoirRessourcesSpecifiques(){
         super.percevoirRessourcesSpecifiques();
-        this.getJoueur().ajouterPieces(1);
-        ArrayList<Quartier> quartierDansCite = this.getJoueur().getCite();
+        System.out.println("Vous avez gagné 1 pièce pour votre rang de marchande.");
+        super.getJoueur().ajouterPieces(1);
+        ArrayList<Quartier> quartierDansCite = super.getJoueur().getCite();
 
+        int count = 0;
         for(int i = 0 ; i < quartierDansCite.size() ; i++){
             if(quartierDansCite.get(i).getType().equals("COMMERCANT")){
-                this.getJoueur().ajouterPieces(1);
+                count++;
             }
         }
+
+        super.getJoueur().ajouterPieces(count);
+        System.out.println("Vous avez gagné " + count + " pièce(s) car vous avez " + count + " quartier(s) de type COMMERCANT.");
     }
 
     @Override
