@@ -10,6 +10,7 @@ public class Eveque extends Personnage{
 
     @Override
     public void percevoirRessourcesSpecifiques() {
+        super.percevoirRessourcesSpecifiques();
         ArrayList<Quartier> quartierDansCite = this.getJoueur().getCite();
 
         for(int i = 0 ; i < quartierDansCite.size() ; i++){
@@ -21,5 +22,12 @@ public class Eveque extends Personnage{
     }
 
     @Override
-    public void utiliserPouvoirAvatar() {}
+    public void utiliserPouvoir() {
+        super.utiliserPouvoir();
+    }
+
+    @Override
+    public void utiliserPouvoirAvatar() {
+        super.utiliserPouvoir();
+    }
 }

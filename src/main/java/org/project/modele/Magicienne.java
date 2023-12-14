@@ -13,7 +13,7 @@ public class Magicienne extends Personnage{
 
     @Override
     public void utiliserPouvoir() {
-        if(this.getJoueur().getMainJoueur().size() == 0){
+        if(this.getJoueur().getMainJoueur().isEmpty()){
             System.out.println("Vous n'avez pas de cartes dans votre main, votre pouvoir ne peut pas être utilisé !");
         }
         else{
@@ -65,11 +65,13 @@ public class Magicienne extends Personnage{
 
             else if(!echanger){
                 afficherCartesDansMain();
-                System.out.println("Combien de cartes voulez-vous prendre dans la pioche ?");
+                System.out.println("Combien de cartes voulez-vous prendre dans la pioche ? (0 pour ne pas prendre de cartes)");
                 int nbCartes = Interaction.lireUnEntier(0, this.getJoueur().getMainJoueur().size() + 1);
+
                 if(nbCartes == 0){
                     return;
                 }
+
                 else if (nbCartes == this.getJoueur().getMainJoueur().size()){
                     for(int i = 0; i < nbCartes; i++){
                         this.getPlateau().getPioche().ajouter(this.getJoueur().getMainJoueur().get(i));
@@ -80,16 +82,13 @@ public class Magicienne extends Personnage{
                 else{
                     int i = 0;
                     do{
-                        System.out.println("Numéro de la carte n°" + (i+1) + " que vous voulez retirer (0 pour arrêter)");
-                        int choix = Interaction.lireUnEntier(0, this.getJoueur().getMainJoueur().size() + 1);
-                        if(choix == 0){
-                            return;
-                        }
-                        else{
-                            this.getPlateau().getPioche().ajouter(this.getJoueur().getMainJoueur().get(choix - 1));
-                            this.getJoueur().retirerQuartierDansMain(choix - 1);
-                            i++;
-                        }
+                        System.out.println("Numéro de la carte n°" + (i+1) + " que vous voulez retirer");
+                        int choix = Interaction.lireUnEntier(1, this.getJoueur().getMainJoueur().size() + 1);
+
+                        this.getPlateau().getPioche().ajouter(this.getJoueur().getMainJoueur().get(choix - 1));
+                        this.getJoueur().retirerQuartierDansMain(choix - 1);
+                        afficherCartesDansMain();
+                        i++;
 
                     }while(i != nbCartes);
 
@@ -139,7 +138,7 @@ public class Magicienne extends Personnage{
                         continue;
                     }
 
-                    if(listeJoueurs.get(choix - 1).getMainJoueur().size() == 0){
+                    if(listeJoueurs.get(choix - 1).getMainJoueur().isEmpty()){
                         System.out.println("Le joueur choisi n'a pas de cartes dans sa main, veuillez en choisir un autre !");
                         continue;
                     }
@@ -178,17 +177,14 @@ public class Magicienne extends Personnage{
                 else{
                     int i = 0;
                     do{
-                        System.out.println("Numéro de la carte n°" + (i+1) + " que vous voulez retirer (0 pour arrêter)");
-                        int choix = random.nextInt(this.getJoueur().getMainJoueur().size() + 1);
+                        System.out.println("Numéro de la carte n°" + (i+1) + " que vous voulez retirer");
+                        int choix = random.nextInt(this.getJoueur().getMainJoueur().size()) + 1;
                         System.out.println(choix);
-                        if(choix == 0){
-                            return;
-                        }
-                        else{
-                            this.getPlateau().getPioche().ajouter(this.getJoueur().getMainJoueur().get(choix - 1));
-                            this.getJoueur().retirerQuartierDansMain(choix - 1);
-                            i++;
-                        }
+
+                        this.getPlateau().getPioche().ajouter(this.getJoueur().getMainJoueur().get(choix - 1));
+                        this.getJoueur().retirerQuartierDansMain(choix - 1);
+                        afficherCartesDansMain();
+                        i++;
 
                     }while(i != nbCartes);
 
@@ -205,7 +201,7 @@ public class Magicienne extends Personnage{
         System.out.println("Liste des cartes dans votre main : ");
         int i = 1;
         for (Quartier quartier : this.getJoueur().getMainJoueur()) {
-            System.out.println(i + ". " + quartier.getNom() + " (Type : " + quartier.getType() + ")");
+            System.out.println(i + ". " + quartier.getNom() + " (Type : " + quartier.getType() + ")" + " (Cout : " + quartier.getCoutConstruction() + ")");
             i++;
         }
         System.out.println();

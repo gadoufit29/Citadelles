@@ -10,6 +10,7 @@ public class Assassin extends Personnage{
     public Assassin(){
         super("Assassin", 1, Caracteristiques.ASSASSIN, 1);
     }
+
     @Override
     public void utiliserPouvoir() {
         System.out.println("Voulez-vous asssassiner un joueur ? (o / oui ;  n / non)");

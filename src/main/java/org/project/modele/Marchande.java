@@ -9,6 +9,8 @@ public class Marchande extends Personnage{
 
     @Override
     public void percevoirRessourcesSpecifiques(){
+        super.percevoirRessourcesSpecifiques();
+        this.getJoueur().ajouterPieces(1);
         ArrayList<Quartier> quartierDansCite = this.getJoueur().getCite();
 
         for(int i = 0 ; i < quartierDansCite.size() ; i++){
@@ -20,9 +22,11 @@ public class Marchande extends Personnage{
 
     @Override
     public void utiliserPouvoir() {
-        this.getJoueur().ajouterPieces(1);
+        super.utiliserPouvoir();
     }
 
     @Override
-    public void utiliserPouvoirAvatar() {}
+    public void utiliserPouvoirAvatar() {
+        super.utiliserPouvoir();
+    }
 }
